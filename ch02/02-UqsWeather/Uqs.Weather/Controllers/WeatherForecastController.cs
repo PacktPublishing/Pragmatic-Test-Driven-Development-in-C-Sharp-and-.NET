@@ -7,28 +7,27 @@ namespace Uqs.Weather.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
-    private readonly ILogger<WeatherForecastController> _logger;
-    private readonly IConfiguration _config;
-
     private const int FORECAST_DAYS = 5;
+    private readonly ILogger<WeatherForecastController> _logger;
 
     private static readonly string[] Summaries = new[]
-{
+    {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild",
         "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfiguration config)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger)
     {
         _logger = logger;
-        _config = config;
     }
 
     [HttpGet("GetRealWeatherForecast")]
     public async Task<IEnumerable<WeatherForecast>> GetReal()
     {
         HttpClient httpClient = new HttpClient();
-        string apiKey = _config["OpenWeather:Key"];
+        var builder = new ConfigurationBuilder();
+        var config = builder.AddJsonFile("appsettings.json").Build();
+        string apiKey = config["OpenWeather:Key"];
         Client openWeatherClient = new Client(apiKey, httpClient);
         const decimal GREENWICH_LAT = 51.4810m;
         const decimal GREENWICH_LON = 0.0052m;
@@ -52,8 +51,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet("GetRandomWeatherForecast")]
     public IEnumerable<WeatherForecast> GetRandom()
     {
-        WeatherForecast[] wfs = 
-            new WeatherForecast[FORECAST_DAYS];
+        WeatherForecast[] wfs = new WeatherForecast[FORECAST_DAYS];
         for(int i = 0;i < wfs.Length;i++)
         {
             var wf = wfs[i] = new WeatherForecast();
