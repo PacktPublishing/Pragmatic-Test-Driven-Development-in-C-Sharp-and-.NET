@@ -24,10 +24,10 @@ public class WeatherForecastController : ControllerBase
     [HttpGet("GetRealWeatherForecast")]
     public async Task<IEnumerable<WeatherForecast>> GetReal()
     {
-        HttpClient httpClient = new HttpClient();
         var builder = new ConfigurationBuilder();
         var config = builder.AddJsonFile("appsettings.json").Build();
         string apiKey = config["OpenWeather:Key"];
+        HttpClient httpClient = new HttpClient();
         Client openWeatherClient = new Client(apiKey, httpClient);
         const decimal GREENWICH_LAT = 51.4810m;
         const decimal GREENWICH_LON = 0.0052m;
