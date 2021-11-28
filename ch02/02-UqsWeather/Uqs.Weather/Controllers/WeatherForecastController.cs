@@ -9,6 +9,7 @@ public class WeatherForecastController : ControllerBase
 {
     private const int FORECAST_DAYS = 5;
     private readonly ILogger<WeatherForecastController> _logger;
+    private readonly IConfiguration _config;
 
     private static readonly string[] Summaries = new[]
     {
@@ -16,23 +17,22 @@ public class WeatherForecastController : ControllerBase
         "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, IConfiguration config)
     {
         _logger = logger;
+        _config = config;
     }
 
     [HttpGet("GetRealWeatherForecast")]
     public async Task<IEnumerable<WeatherForecast>> GetReal()
     {
-        var builder = new ConfigurationBuilder();
-        var config = builder.AddJsonFile("appsettings.json").Build();
-        string apiKey = config["OpenWeather:Key"];
-        HttpClient httpClient = new HttpClient();
-        Client openWeatherClient = new Client(apiKey, httpClient);
         const decimal GREENWICH_LAT = 51.4810m;
         const decimal GREENWICH_LON = 0.0052m;
-        OneCallResponse res = await openWeatherClient
-            .OneCallAsync(GREENWICH_LAT, GREENWICH_LON, new [] {
+        string apiKey = _config["OpenWeather:Key"];
+        HttpClient httpClient = new HttpClient();
+        Client openWeatherClient = new Client(apiKey, httpClient);
+        OneCallResponse res = await openWeatherClient.OneCallAsync
+            (GREENWICH_LAT, GREENWICH_LON, new [] {
                 Excludes.Current, Excludes.Minutely,
                 Excludes.Hourly, Excludes.Alerts }, Units.Metric);
 
