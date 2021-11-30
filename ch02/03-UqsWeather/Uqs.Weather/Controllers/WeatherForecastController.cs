@@ -21,15 +21,23 @@ public class WeatherForecastController : ControllerBase
         "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
 
-    public WeatherForecastController(IClient client, INowWrapper nowWrapper,
-        IRandomWrapper randomWrapper, ILogger<WeatherForecastController> logger, 
+    public WeatherForecastController(ILogger<WeatherForecastController> logger,
+        IClient client, INowWrapper nowWrapper, IRandomWrapper randomWrapper,  
         IConfiguration config)
     {
+        _logger = logger;
         _client = client;
         _nowWrapper = nowWrapper;
         _randomWrapper = randomWrapper;
-        _logger = logger;
         _config = config;
+    }
+
+    [HttpGet("ConvertCToF")]
+    public double ConvertCToF(double c)
+    {
+        double f = c * (9d / 5d) + 32;
+        _logger.LogInformation("conversion requested");
+        return f;
     }
 
     [HttpGet("GetRealWeatherForecast")]
