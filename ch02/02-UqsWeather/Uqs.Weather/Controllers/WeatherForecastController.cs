@@ -23,6 +23,14 @@ public class WeatherForecastController : ControllerBase
         _config = config;
     }
 
+    [HttpGet("ConvertCToF")]
+    public double ConvertCToF(double c)
+    {
+        double f = c * (9d / 5d) + 32;
+        _logger.LogInformation("conversion requested");
+        return f;
+    }
+
     [HttpGet("GetRealWeatherForecast")]
     public async Task<IEnumerable<WeatherForecast>> GetReal()
     {
@@ -62,13 +70,16 @@ public class WeatherForecastController : ControllerBase
         return wfs;
     }
 
-    private string MapFeelToTemp(int temperatureC)
+    private static string MapFeelToTemp(int temperatureC)
     {
+        // Anything <= 0 is "Freezing"
         if (temperatureC <= 0)
         {
             return Summaries.First();
         }
+        // Dividing the temperature into 5 intervals
         int summariesIndex = (temperatureC / 5) + 1;
+        // Anything >= 45 is "Scorching"
         if (summariesIndex >= Summaries.Length)
         {
             return Summaries.Last();
