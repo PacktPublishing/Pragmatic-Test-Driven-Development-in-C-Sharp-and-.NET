@@ -13,7 +13,6 @@ public class WeatherForecastController : ControllerBase
     private readonly INowWrapper _nowWrapper;
     private readonly IRandomWrapper _randomWrapper;
     private readonly ILogger<WeatherForecastController> _logger;
-    private readonly IConfiguration _config;
 
     private static readonly string[] Summaries = new[]
     {
@@ -22,14 +21,12 @@ public class WeatherForecastController : ControllerBase
     };
 
     public WeatherForecastController(ILogger<WeatherForecastController> logger,
-        IClient client, INowWrapper nowWrapper, IRandomWrapper randomWrapper,  
-        IConfiguration config)
+        IClient client, INowWrapper nowWrapper, IRandomWrapper randomWrapper)
     {
         _logger = logger;
         _client = client;
         _nowWrapper = nowWrapper;
         _randomWrapper = randomWrapper;
-        _config = config;
     }
 
     [HttpGet("ConvertCToF")]
