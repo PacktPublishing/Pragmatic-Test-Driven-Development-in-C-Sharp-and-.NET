@@ -5,7 +5,7 @@ namespace Uqs.Weather;
 public class ClientStub : IClient
 {
     public Task<OneCallResponse> OneCallAsync(
-        decimal latitude, decimal longitude, Excludes[] excludes, Units unit)
+        decimal latitude, decimal longitude, IEnumerable<Excludes> excludes, Units unit)
     {
         const int DAYS = 7;
         OneCallResponse res = new OneCallResponse();
