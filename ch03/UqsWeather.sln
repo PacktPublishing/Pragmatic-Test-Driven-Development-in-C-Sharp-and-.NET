@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uqs.Weather", "Uqs.Weather\Uqs.Weather.csproj", "{CF7DEBFC-E6C9-432A-9F2E-F5D534A8BD0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uqs.Weather.Tests.Unit", "Uqs.Weather.Tests.Unit\Uqs.Weather.Tests.Unit.csproj", "{34E5EEAE-8B41-43D2-8538-46C8F724CE10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{CF7DEBFC-E6C9-432A-9F2E-F5D534A8BD0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF7DEBFC-E6C9-432A-9F2E-F5D534A8BD0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF7DEBFC-E6C9-432A-9F2E-F5D534A8BD0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34E5EEAE-8B41-43D2-8538-46C8F724CE10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34E5EEAE-8B41-43D2-8538-46C8F724CE10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34E5EEAE-8B41-43D2-8538-46C8F724CE10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34E5EEAE-8B41-43D2-8538-46C8F724CE10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
