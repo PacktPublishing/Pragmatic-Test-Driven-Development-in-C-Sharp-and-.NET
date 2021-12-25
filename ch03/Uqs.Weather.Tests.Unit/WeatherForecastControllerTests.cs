@@ -35,16 +35,102 @@ public class WeatherForecastControllerTests
     }
 
     [Fact]
-    public async Task GetReal_IncomingRealWeather_MappedCorrectly()
+    public async Task GetReal_NotInterestedInTodayWeather_WFStartsFromNextDay()
     {
-        var date = new DateTime(2022, 1, 1);
-        var temps = new double[] {2.2, 3, 4.4, 5, 6.6, 7, 8.8};
-        var client = new ClientStub(date, temps);
+        // Arrange
+        const double nextDayTemp = 3.3;
+        const double day5Temp = 7.7;
+        var today = new DateTime(2022, 1, 1);
+        var realWeatherTemps = new double[] {2, nextDayTemp, 4, 5.5, 6, day5Temp, 8};
+        var clientStub = new ClientStub(today, realWeatherTemps);
         var logger = NullLogger<WeatherForecastController>.Instance;
-        var controller = new WeatherForecastController(logger, client, null!, null!);
+        var controller = new WeatherForecastController(logger, clientStub, null!, null!);
 
-        var weatherForecast = await controller.GetReal();
+        // Act
+        IEnumerable<WeatherForecast> wfs = await controller.GetReal();
 
-        Assert.Equal(expected, actual);
+        // Assert
+        Assert.Equal(3, wfs.First().TemperatureC);
+    }
+
+    [Fact]
+    public async Task GetReal_5DaysForecastStartingNextDay_WF5ThDayIsRealWeather6ThDay()
+    {
+        const double nextDayTemp = 3.3;
+        const double day5Temp = 7.7;
+        var today = new DateTime(2022, 1, 1);
+        var realWeatherTemps = new double[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
+        var clientStub = new ClientStub(today, realWeatherTemps);
+        var logger = NullLogger<WeatherForecastController>.Instance;
+        var controller = new WeatherForecastController(logger, clientStub, null!, null!);
+
+        IEnumerable<WeatherForecast> wfs = await controller.GetReal();
+
+        Assert.Equal(8, wfs.Last().TemperatureC);
+    }
+
+    [Fact]
+    public async Task GetReal_ForecastingFor5DaysOnly_WFHas5Days()
+    {
+        const double nextDayTemp = 3.3;
+        const double day5Temp = 7.7;
+        var today = new DateTime(2022, 1, 1);
+        var realWeatherTemps = new double[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
+        var clientStub = new ClientStub(today, realWeatherTemps);
+        var logger = NullLogger<WeatherForecastController>.Instance;
+        var controller = new WeatherForecastController(logger, clientStub, null!, null!);
+
+        IEnumerable<WeatherForecast> wfs = await controller.GetReal();
+
+        Assert.Equal(5, wfs.Count());
+    }
+
+    [Fact]
+    public async Task GetReal_WFDoesntConsiderDecimal_RealWeatherTempRoundedProperly()
+    {
+        const double nextDayTemp = 3.3;
+        const double day5Temp = 7.7;
+        var today = new DateTime(2022, 1, 1);
+        var realWeatherTemps = new double[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
+        var clientStub = new ClientStub(today, realWeatherTemps);
+        var logger = NullLogger<WeatherForecastController>.Instance;
+        var controller = new WeatherForecastController(logger, clientStub, null!, null!);
+
+        IEnumerable<WeatherForecast> wfs = await controller.GetReal();
+
+        Assert.Equal(3, wfs.First().TemperatureC);
+        Assert.Equal(8, wfs.Last().TemperatureC);
+    }
+
+    [Fact]
+    public async Task GetReal_TodayWeatherAnd6DaysForecastReceived_RealDateMatchesNextDay()
+    {
+        const double nextDayTemp = 3.3;
+        const double day5Temp = 7.7;
+        var today = new DateTime(2022, 1, 1);
+        var realWeatherTemps = new double[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
+        var clientStub = new ClientStub(today, realWeatherTemps);
+        var logger = NullLogger<WeatherForecastController>.Instance;
+        var controller = new WeatherForecastController(logger, clientStub, null!, null!);
+
+        IEnumerable<WeatherForecast> wfs = await controller.GetReal();
+
+        Assert.Equal(new DateTime(2022, 1, 2), wfs.First().Date);
+    }
+
+    [Fact]
+    public async Task GetReal_TodayWeatherAnd6DaysForecastReceived_RealDateMatchesLastDay()
+    {
+        const double nextDayTemp = 3.3;
+        const double day5Temp = 7.7;
+        var today = new DateTime(2022, 1, 1);
+        var realWeatherTemps = new double[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
+        var clientStub = new ClientStub(today, realWeatherTemps);
+        var logger = NullLogger<WeatherForecastController>.Instance;
+        var controller = new WeatherForecastController(logger, clientStub, null!, null!);
+
+        IEnumerable<WeatherForecast> wfs = await controller.GetReal();
+
+        Assert.Equal(new DateTime(2022, 1, 6), wfs.Last().Date);
     }
 }
