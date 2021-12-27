@@ -2,6 +2,7 @@ using AdamTibi.OpenWeather;
 using Microsoft.Extensions.Logging.Abstractions;
 using Uqs.Weather.Controllers;
 using Uqs.Weather.Tests.Unit.Stubs;
+using Xunit;
 
 namespace Uqs.Weather.Tests.Unit;
 
@@ -158,5 +159,4 @@ public class WeatherForecastControllerTests
         Assert.NotNull(clientStub.LastUnitSpy);
         Assert.Equal(Units.Metric, clientStub.LastUnitSpy!.Value);
     }
-
 }
