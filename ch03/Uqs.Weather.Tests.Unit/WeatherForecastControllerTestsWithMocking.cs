@@ -41,38 +41,37 @@ public class WeatherForecastControllerTestsWithMocking
         Assert.Equal(3, wfs.First().TemperatureC);
     }
 
-    //[Fact]
-    //public async Task GetReal_AllRequestsToOpenWeather_MetricUnitIsUsed()
-    //{
-    //    // Arrange
-    //    var realWeatherTemps = new double[] { 1, 2, 3, 4, 5, 6, 7 };
-    //    var today = default(DateTime);
-    //    var clientMock = Substitute.For<IClient>();
-    //    clientMock.OneCallAsync(Arg.Any<decimal>(), Arg.Any<decimal>(),
-    //        Arg.Any<IEnumerable<Excludes>>(), Arg.Any<Units>())
-    //        .Returns(x =>
-    //        {
-    //            const int DAYS = 7;
-    //            OneCallResponse res = new OneCallResponse();
-    //            res.Daily = new Daily[DAYS];
-    //            for (int i = 0; i < DAYS; i++)
-    //            {
-    //                res.Daily[i] = new Daily();
-    //                res.Daily[i].Dt = today.AddDays(i);
-    //                res.Daily[i].Temp = new Temp();
-    //                res.Daily[i].Temp.Day = realWeatherTemps.ElementAt(i);
-    //            }
-    //            return Task.FromResult(res);
-    //        });
-    //    var controller = new WeatherForecastController(null!, clientMock, null!, null!);
+    [Fact]
+    public async Task GetReal_RequestsToOpenWeather_MetricUnitIsUsed()
+    {
+        // Arrange
+        var realWeatherTemps = new double[] { 1, 2, 3, 4, 5, 6, 7 };
+        var today = default(DateTime);
+        var clientMock = Substitute.For<IClient>();
+        clientMock.OneCallAsync(Arg.Any<decimal>(), Arg.Any<decimal>(),
+            Arg.Any<IEnumerable<Excludes>>(), Arg.Any<Units>())
+            .Returns(x =>
+            {
+                const int DAYS = 7;
+                OneCallResponse res = new OneCallResponse();
+                res.Daily = new Daily[DAYS];
+                for (int i = 0; i < DAYS; i++)
+                {
+                    res.Daily[i] = new Daily();
+                    res.Daily[i].Dt = today.AddDays(i);
+                    res.Daily[i].Temp = new Temp();
+                    res.Daily[i].Temp.Day = realWeatherTemps.ElementAt(i);
+                }
+                return Task.FromResult(res);
+            });
+        var controller = new WeatherForecastController(null!, clientMock, null!, null!);
 
-    //    // Act
-    //    var _ = await controller.GetReal();
+        // Act
+        var _ = await controller.GetReal();
 
-    //    // Assert
-    //    clientMock.
-    //    Assert.NotNull(clientStub.LastUnitSpy);
-    //    Assert.Equal(Units.Metric, clientStub.LastUnitSpy!.Value);
-    //}
+        // Assert
+        await clientMock.Received().OneCallAsync(Arg.Any<decimal>(), Arg.Any<decimal>(),
+            Arg.Any<IEnumerable<Excludes>>(), Arg.Is<Units>(x => x == Units.Metric));
+    }
 
 }

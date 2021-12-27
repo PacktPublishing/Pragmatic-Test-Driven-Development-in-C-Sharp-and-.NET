@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+    <CodeSnippet Format="1.0.0">
+        <Header>
+            <Title>Arrange Act Assert</Title>
+			<Shortcut>aaa</Shortcut>
+			<Description>Generates a unit test method</Description>
+			<Author>Adam Tibi</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+        </Header>
+        <Snippet>
+			<Imports>
+				<Import>
+					<Namespace>Xunit</Namespace>
+				</Import>
+			</Imports>
+			<Declarations>
+				<Literal>
+					<ID>name</ID>
+					<ToolTip>Replace with the name of the test method</ToolTip>
+					<Default>Method_Condition_Expectation</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="CSharp">
+		<![CDATA[[Fact]
+		public void $name$()
+		{
+			// Arrange
+			$end$
+
+			// Act
+
+
+			// Assert
+			
+		}]]></Code>
+        </Snippet>
+    </CodeSnippet>
+</CodeSnippets>

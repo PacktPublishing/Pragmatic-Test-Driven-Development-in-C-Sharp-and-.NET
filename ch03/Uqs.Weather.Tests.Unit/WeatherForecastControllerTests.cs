@@ -2,7 +2,6 @@ using AdamTibi.OpenWeather;
 using Microsoft.Extensions.Logging.Abstractions;
 using Uqs.Weather.Controllers;
 using Uqs.Weather.Tests.Unit.Stubs;
-using Xunit;
 
 namespace Uqs.Weather.Tests.Unit;
 
@@ -145,7 +144,7 @@ public class WeatherForecastControllerTests
     }
 
     [Fact]
-    public async Task GetReal_AllRequestsToOpenWeather_MetricUnitIsUsed()
+    public async Task GetReal_RequestsToOpenWeather_MetricUnitIsUsed()
     {
         // Arrange
         var realWeatherTemps = new double[] { 1,2,3,4,5,6,7 };
@@ -159,4 +158,5 @@ public class WeatherForecastControllerTests
         Assert.NotNull(clientStub.LastUnitSpy);
         Assert.Equal(Units.Metric, clientStub.LastUnitSpy!.Value);
     }
+
 }
