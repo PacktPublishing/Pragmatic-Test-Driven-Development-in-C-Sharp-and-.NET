@@ -24,10 +24,10 @@ public class WeatherForecastTests
 
         // Act
         var httpRes = await httpClient.GetAsync(API_URI);
-        var wfs = await httpRes.Content.ReadFromJsonAsync<WeatherForecast[]>();
 
         // Assert
-        for(int i = 0;i < 5;i++)
+        var wfs = await httpRes.Content.ReadFromJsonAsync<WeatherForecast[]>();
+        for (int i = 0;i < 5;i++)
         {
             Assert.Equal(next5Days[i], wfs[i].Date.Date);
         }
