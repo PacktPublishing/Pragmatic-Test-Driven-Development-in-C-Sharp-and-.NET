@@ -12,6 +12,7 @@ public class WeatherForecastTests
     private const string API_URI = "/WeatherForecast/GetRealWeatherForecast";
     private record WeatherForecast(DateTime Date, int TemperatureC, int TemperatureF, string? Summary);
 
+    // You have to run Uqs.Weather before running this test
     [Fact]
     public async Task GetRealWeatherForecast_Execute_GetNext5Days()
     {
