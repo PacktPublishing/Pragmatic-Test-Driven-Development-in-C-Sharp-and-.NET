@@ -43,10 +43,7 @@ public class WeatherForecastTestsReadable
     public async Task GetReal_RequestsToOpenWeather_MetricUnitIsUsed()
     {
         // Arrange
-        OneCallResponse res = new OneCallResponseBuilder()
-          .SetToday(default(DateTime))
-          .Build();
-
+        OneCallResponse res = new OneCallResponseBuilder().Build();
         _clientMock.OneCallAsync(Arg.Any<decimal>(), Arg.Any<decimal>(),
             Arg.Any<IEnumerable<Excludes>>(), Arg.Any<Units>())
             .Returns(res);

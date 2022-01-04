@@ -5,7 +5,7 @@ using NSubstitute;
 
 namespace Uqs.Weather.Tests.Unit;
 
-public class WeatherForecastTestsNonReadable
+public class WeatherForecastTestsLessReadable
 {
 
     [Fact]
