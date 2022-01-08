@@ -2,6 +2,7 @@ using Uqs.Weather.Controllers;
 using Xunit;
 using AdamTibi.OpenWeather;
 using NSubstitute;
+using Uqs.Weather.Wrappers;
 
 namespace Uqs.Weather.Tests.Unit;
 
@@ -11,14 +12,14 @@ public class WeatherForecastControllerTestsWithMocking
     public async Task GetReal_NotInterestedInTodayWeather_WFStartsFromNextDay()
     {
         // Arrange
-        const double nextDayTemp = 3.3;
-        const double day5Temp = 7.7;
+        const double NEXT_DAY_TEMP = 3.3;
+        const double DAY5_TEMP = 7.7;
         var today = new DateTime(2022, 1, 1);
-        var realWeatherTemps = new double[] {2, nextDayTemp, 4, 5.5, 6, day5Temp, 8};
+        var realWeatherTemps = new[] {2, NEXT_DAY_TEMP, 4, 5.5, 6, DAY5_TEMP, 8};
         var clientMock = Substitute.For<IClient>();
         clientMock.OneCallAsync(Arg.Any<decimal>(), Arg.Any<decimal>(), 
             Arg.Any<IEnumerable<Excludes>>(), Arg.Any<Units>())
-            .Returns(x => 
+            .Returns(_ => 
             {
                 const int DAYS = 7;
                 OneCallResponse res = new OneCallResponse();
@@ -50,7 +51,7 @@ public class WeatherForecastControllerTestsWithMocking
         var clientMock = Substitute.For<IClient>();
         clientMock.OneCallAsync(Arg.Any<decimal>(), Arg.Any<decimal>(),
             Arg.Any<IEnumerable<Excludes>>(), Arg.Any<Units>())
-            .Returns(x =>
+            .Returns(_ =>
             {
                 const int DAYS = 7;
                 OneCallResponse res = new OneCallResponse();

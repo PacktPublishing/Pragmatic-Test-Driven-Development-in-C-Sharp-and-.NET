@@ -42,7 +42,7 @@ public class WeatherForecastControllerTests
         const double nextDayTemp = 3.3;
         const double day5Temp = 7.7;
         var today = new DateTime(2022, 1, 1);
-        var realWeatherTemps = new double[] {2, nextDayTemp, 4, 5.5, 6, day5Temp, 8};
+        var realWeatherTemps = new[] {2, nextDayTemp, 4, 5.5, 6, day5Temp, 8};
         var clientStub = new ClientStub(today, realWeatherTemps);
         var controller = new WeatherForecastController(null!, clientStub, null!, null!);
 
@@ -60,7 +60,7 @@ public class WeatherForecastControllerTests
         const double nextDayTemp = 3.3;
         const double day5Temp = 7.7;
         var today = new DateTime(2022, 1, 1);
-        var realWeatherTemps = new double[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
+        var realWeatherTemps = new[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
         var clientStub = new ClientStub(today, realWeatherTemps);
         var controller = new WeatherForecastController(null!, clientStub, null!, null!);
 
@@ -78,7 +78,7 @@ public class WeatherForecastControllerTests
         const double nextDayTemp = 3.3;
         const double day5Temp = 7.7;
         var today = new DateTime(2022, 1, 1);
-        var realWeatherTemps = new double[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
+        var realWeatherTemps = new[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
         var clientStub = new ClientStub(today, realWeatherTemps);
         var controller = new WeatherForecastController(null!, clientStub, null!, null!);
 
@@ -96,7 +96,7 @@ public class WeatherForecastControllerTests
         const double nextDayTemp = 3.3;
         const double day5Temp = 7.7;
         var today = new DateTime(2022, 1, 1);
-        var realWeatherTemps = new double[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
+        var realWeatherTemps = new[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
         var clientStub = new ClientStub(today, realWeatherTemps);
         var controller = new WeatherForecastController(null!, clientStub, null!, null!);
 
@@ -115,7 +115,7 @@ public class WeatherForecastControllerTests
         const double nextDayTemp = 3.3;
         const double day5Temp = 7.7;
         var today = new DateTime(2022, 1, 1);
-        var realWeatherTemps = new double[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
+        var realWeatherTemps = new[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
         var clientStub = new ClientStub(today, realWeatherTemps);
         var controller = new WeatherForecastController(null!, clientStub, null!, null!);
 
@@ -133,7 +133,7 @@ public class WeatherForecastControllerTests
         const double nextDayTemp = 3.3;
         const double day5Temp = 7.7;
         var today = new DateTime(2022, 1, 1);
-        var realWeatherTemps = new double[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
+        var realWeatherTemps = new[] { 2, nextDayTemp, 4, 5.5, 6, day5Temp, 8 };
         var clientStub = new ClientStub(today, realWeatherTemps);
         var controller = new WeatherForecastController(null!, clientStub, null!, null!);
 
@@ -149,7 +149,7 @@ public class WeatherForecastControllerTests
     {
         // Arrange
         var realWeatherTemps = new double[] { 1,2,3,4,5,6,7 };
-        var clientStub = new ClientStub(default(DateTime), realWeatherTemps);
+        var clientStub = new ClientStub(default, realWeatherTemps);
         var controller = new WeatherForecastController(null!, clientStub, null!, null!);
 
         // Act
