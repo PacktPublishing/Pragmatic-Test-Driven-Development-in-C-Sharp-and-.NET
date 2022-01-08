@@ -49,7 +49,7 @@ public class WeatherForecastTestsReadable
             .Returns(res);
 
         // Act
-        IEnumerable<WeatherForecast> wfs = await _sut.GetReal();
+        await _sut.GetReal();
 
         // Assert
         await _clientMock.Received().OneCallAsync(Arg.Any<decimal>(), Arg.Any<decimal>(),
@@ -60,7 +60,7 @@ public class WeatherForecastTestsReadable
     {
         private int _days = 7;
         private DateTime _today = new (2022, 1, 1);
-        private double[] _temps = new[] { 2, 3.3, 4, 5.5, 6, 7.7, 8 };
+        private double[] _temps = { 2, 3.3, 4, 5.5, 6, 7.7, 8 };
 
         public OneCallResponseBuilder SetDays(int days)
         {

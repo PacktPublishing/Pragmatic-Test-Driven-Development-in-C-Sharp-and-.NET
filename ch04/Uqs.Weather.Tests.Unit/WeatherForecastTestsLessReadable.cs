@@ -12,14 +12,14 @@ public class WeatherForecastTestsLessReadable
     public async Task GetReal_NotInterestedInTodayWeather_WFStartsFromNextDay()
     {
         // Arrange
-        const double nextT = 3.3;
-        const double day5T = 7.7;
+        const double NEXT_T = 3.3;
+        const double DAY5_T = 7.7;
         var today = new DateTime(2022, 1, 1);
-        var realWeatherTemps = new double[] { 2, nextT, 4, 5.5, 6, day5T, 8 };
+        var realWeatherTemps = new[] { 2, NEXT_T, 4, 5.5, 6, DAY5_T, 8 };
         var clientMock = Substitute.For<IClient>();
         clientMock.OneCallAsync(Arg.Any<decimal>(), Arg.Any<decimal>(),
             Arg.Any<IEnumerable<Excludes>>(), Arg.Any<Units>())
-            .Returns(x =>
+            .Returns(_ =>
             {
                 const int DAYS = 7;
                 OneCallResponse res = new OneCallResponse();
@@ -51,7 +51,7 @@ public class WeatherForecastTestsLessReadable
         var clientMock = Substitute.For<IClient>();
         clientMock.OneCallAsync(Arg.Any<decimal>(), Arg.Any<decimal>(),
             Arg.Any<IEnumerable<Excludes>>(), Arg.Any<Units>())
-            .Returns(x =>
+            .Returns(_ =>
             {
                 const int DAYS = 7;
                 OneCallResponse res = new OneCallResponse();
