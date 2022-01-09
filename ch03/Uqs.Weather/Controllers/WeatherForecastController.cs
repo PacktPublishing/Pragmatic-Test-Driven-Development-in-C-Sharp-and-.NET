@@ -59,20 +59,6 @@ public class WeatherForecastController : ControllerBase
         return wfs;
     }
 
-    [HttpGet("GetRandomWeatherForecast")]
-    public IEnumerable<WeatherForecast> GetRandom()
-    {
-        WeatherForecast[] wfs = new WeatherForecast[FORECAST_DAYS];
-        for (int i = 0; i < wfs.Length; i++)
-        {
-            var wf = wfs[i] = new WeatherForecast();
-            wf.Date = _nowWrapper.Now.AddDays(i + 1);
-            wf.TemperatureC = _randomWrapper.Next(-20, 55);
-            wf.Summary = MapFeelToTemp(wf.TemperatureC);
-        }
-        return wfs;
-    }
-
     private string MapFeelToTemp(int temperatureC)
     {
         if (temperatureC <= 0)
@@ -85,5 +71,19 @@ public class WeatherForecastController : ControllerBase
             return Summaries.Last();
         }
         return Summaries[summariesIndex];
+    }
+
+    [HttpGet("GetRandomWeatherForecast")]
+    public IEnumerable<WeatherForecast> GetRandom()
+    {
+        WeatherForecast[] wfs = new WeatherForecast[FORECAST_DAYS];
+        for (int i = 0; i < wfs.Length; i++)
+        {
+            var wf = wfs[i] = new WeatherForecast();
+            wf.Date = _nowWrapper.Now.AddDays(i + 1);
+            wf.TemperatureC = _randomWrapper.Next(-20, 55);
+            wf.Summary = MapFeelToTemp(wf.TemperatureC);
+        }
+        return wfs;
     }
 }
