@@ -159,4 +159,40 @@ public class WeatherForecastControllerTests
         Assert.NotNull(clientStub.LastUnitSpy);
         Assert.Equal(Units.Metric, clientStub.LastUnitSpy!.Value);
     }
+
+    [Theory]
+    [InlineData("Freezing", -1)]
+    [InlineData("Freezing", 0)]
+    [InlineData("Bracing", 1)]
+    [InlineData("Bracing", 4.4)]
+    [InlineData("Chilly", 5)]
+    [InlineData("Chilly", 9.4)]
+    [InlineData("Cool", 10)]
+    [InlineData("Cool", 14.4)]
+    [InlineData("Mild", 15)]
+    [InlineData("Mild", 19.4)]
+    [InlineData("Warm", 20)]
+    [InlineData("Warm", 24.4)]
+    [InlineData("Balmy", 25)]
+    [InlineData("Balmy", 29.4)]
+    [InlineData("Hot", 30)]
+    [InlineData("Hot", 34.4)]
+    [InlineData("Sweltering", 35)]
+    [InlineData("Sweltering", 39.4)]
+    [InlineData("Scorching", 40)]
+    [InlineData("Scorching", 44.4)]
+    [InlineData("Scorching", 46)]
+    public async Task GetReal_Summary_MatchesTemp(string summary, double temp)
+    {
+        // Arrange
+        var realWeatherTemps = new double[] { 1, temp, 3, 4, 5, 6, 7 };
+        var clientStub = new ClientStub(default, realWeatherTemps);
+        var controller = new WeatherForecastController(null!, clientStub, null!, null!);
+
+        // Act
+        var wf = await controller.GetReal();
+
+        // Assert
+        Assert.Equal(summary, wf.First().Summary);
+    }
 }
