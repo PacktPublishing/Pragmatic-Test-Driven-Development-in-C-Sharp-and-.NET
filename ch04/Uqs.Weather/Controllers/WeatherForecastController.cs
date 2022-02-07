@@ -14,8 +14,7 @@ public class WeatherForecastController : ControllerBase
     private readonly IRandomWrapper _randomWrapper;
     private readonly ILogger<WeatherForecastController> _logger;
 
-    private static readonly string[] Summaries = new[]
-    {
+    private static readonly string[] _summaries = {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild",
         "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
@@ -59,6 +58,20 @@ public class WeatherForecastController : ControllerBase
         return wfs;
     }
 
+    private string MapFeelToTemp(int temperatureC)
+    {
+        if (temperatureC <= 0)
+        {
+            return _summaries.First();
+        }
+        int summariesIndex = (temperatureC / 5) + 1;
+        if (summariesIndex >= _summaries.Length)
+        {
+            return _summaries.Last();
+        }
+        return _summaries[summariesIndex];
+    }
+
     [HttpGet("GetRandomWeatherForecast")]
     public IEnumerable<WeatherForecast> GetRandom()
     {
@@ -71,19 +84,5 @@ public class WeatherForecastController : ControllerBase
             wf.Summary = MapFeelToTemp(wf.TemperatureC);
         }
         return wfs;
-    }
-
-    private string MapFeelToTemp(int temperatureC)
-    {
-        if (temperatureC <= 0)
-        {
-            return Summaries.First();
-        }
-        int summariesIndex = (temperatureC / 5) + 1;
-        if (summariesIndex >= Summaries.Length)
-        {
-            return Summaries.Last();
-        }
-        return Summaries[summariesIndex];
     }
 }

@@ -5,21 +5,20 @@ using NSubstitute;
 
 namespace Uqs.Weather.Tests.Unit;
 
-public class WeatherForecastTestsLessReadable
+public class WeatherForecastControllerTestsWithMocking
 {
-
     [Fact]
     public async Task GetReal_NotInterestedInTodayWeather_WFStartsFromNextDay()
     {
         // Arrange
-        const double NEXT_T = 3.3;
-        const double DAY5_T = 7.7;
+        const double NEXT_DAY_TEMP = 3.3;
+        const double DAY5_TEMP = 7.7;
         var today = new DateTime(2022, 1, 1);
-        var realWeatherTemps = new[] { 2, NEXT_T, 4, 5.5, 6, DAY5_T, 8 };
+        var realWeatherTemps = new[] {2, NEXT_DAY_TEMP, 4, 5.5, 6, DAY5_TEMP, 8};
         var clientMock = Substitute.For<IClient>();
-        clientMock.OneCallAsync(Arg.Any<decimal>(), Arg.Any<decimal>(),
+        clientMock.OneCallAsync(Arg.Any<decimal>(), Arg.Any<decimal>(), 
             Arg.Any<IEnumerable<Excludes>>(), Arg.Any<Units>())
-            .Returns(_ =>
+            .Returns(_ => 
             {
                 const int DAYS = 7;
                 OneCallResponse res = new OneCallResponse();
