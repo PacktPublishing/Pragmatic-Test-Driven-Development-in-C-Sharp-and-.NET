@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Uqs.Blog.Domain.DomainObjects.Author">
+    <Position X="2" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACCAAAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DomainObjects\Author.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Uqs.Blog.Domain.DomainObjects.Comment">
+    <Position X="5.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAACAAAAAA=</HashCode>
+      <FileName>DomainObjects\Comment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Uqs.Blog.Domain.DomainObjects.Commenter">
+    <Position X="3.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DomainObjects\Commenter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Uqs.Blog.Domain.DomainObjects.Post">
+    <Position X="7.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAhAAAEAAgAAAAAAAAAAAAEAAAhAAABAAAAA=</HashCode>
+      <FileName>DomainObjects\Post.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Uqs.Blog.Domain.DomainObjects.Tag">
+    <Position X="3.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DomainObjects\Tag.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
