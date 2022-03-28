@@ -16,6 +16,10 @@ public class ProfileService
         {
             throw new ArgumentOutOfRangeException(nameof(username), "Length");
         }
-
+        if (!_formatRegex.Match(username).Success)
+        {
+            throw new ArgumentOutOfRangeException(nameof(username),
+                "InvalidChar");
+        }
     }
 }

@@ -17,7 +17,6 @@ public class ProfileServiceTests
         Assert.StartsWith("Null", ex.Message);
     }
 
-
     [Theory]
     [InlineData("ANameOf8", true)]
     [InlineData("NameOfChar12", true)]
