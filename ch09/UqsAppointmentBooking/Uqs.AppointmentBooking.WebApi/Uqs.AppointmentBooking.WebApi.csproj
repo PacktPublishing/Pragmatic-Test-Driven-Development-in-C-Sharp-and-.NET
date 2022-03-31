@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Uqs.AppointmentBooking.Contract\Uqs.AppointmentBooking.Contract.csproj" />
+    <ProjectReference Include="..\Uqs.AppointmentBooking.Domain\Uqs.AppointmentBooking.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

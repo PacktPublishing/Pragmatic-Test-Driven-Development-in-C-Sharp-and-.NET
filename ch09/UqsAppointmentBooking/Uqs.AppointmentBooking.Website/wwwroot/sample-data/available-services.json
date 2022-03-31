@@ -1,0 +1,52 @@
+﻿{ 
+  "Services": [
+    {
+      "ServiceId": 1,
+      "Name": "Mens Cut",
+      "Duration": 30,
+      "Price": 23
+    },
+    {
+      "ServiceId": 2,
+      "Name": "Men - Clipper & Scissor Cut",
+      "Duration": 30,
+      "Price": 23
+    },
+    {
+      "ServiceId": 3,
+      "Name": "Mens - Beard Trim",
+      "Duration": 10,
+      "Price": 10
+    },
+    {
+      "ServiceId": 4,
+      "Name": "Mens - Full Head Colouring",
+      "Duration": 70,
+      "Price": 60
+    },
+    {
+      "ServiceId": 5,
+      "Name": "Mens - Perm",
+      "Duration": 100,
+      "Price": 90
+    },
+    {
+      "ServiceId": 6,
+      "Name": "Mens - Keratin Treatment",
+      "Duration": 120,
+      "Price": 100
+    },
+    {
+      "ServiceId": 7,
+      "Name": "Boys - Cut",
+      "Duration": 30,
+      "Price": 15
+    },
+    {
+      "ServiceId": 8,
+      "Name": "Girls - Cut",
+      "Duration": 30,
+      "Price": 17
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+﻿@page "/booking/{ServiceId:int}"
+@inject HttpClient Http
+@inject IConfiguration Configuration
+
+<PageTitle>Booking - Heads Up Barbers</PageTitle>
+
+<h1>Booking</h1>
+
+@if (_service is null || _availableEmployees is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<form action="https://localhost:1234/book" method="post">
+    <input name="ServiceId" type="hidden" value="@ServiceId" />
+    <div class="container">
+        <div class="row gx-5">
+            <div class="col-4">
+                <div class="row">
+                    <label>
+                        Select employee:
+                        <select name="EmployeeId" class="form-select form-select-lg mb-3" @onchange="SelectedEmployeesChanged">
+                            <option selected value="">[Any employee]</option>
+                            @foreach (var employee in _availableEmployees.Employees)
+                            {
+                                <option value="@employee.EmployeeId">@employee.Name</option>
+                            }
+                        </select>
+                    </label>
+                </div>
+                <div class="row">
+                    <label>
+                        Select day for your appointment:
+                        <input type="Date" class="form-select form-select-lg mb-3" @onchange="SelectedDayChanged" value="@DateTime.Today.ToString("yyyy-MM-dd")" min="@_availableSlots.DaysSlots.Min(x => x.Day).ToString("yyyy-MM-dd")" max="@_availableSlots.DaysSlots.Max(x => x.Day).ToString("yyyy-MM-dd")" />
+                    </label>
+                </div>
+                <div class="row">
+                    <label>
+                        Select start time:
+                        <select name="Time" id="_times" class="form-select form-select-lg mb-3">
+                            <option selected value="">- Time -</option>
+                            @foreach (var time in _availableSlots.DaysSlots.First().Times)
+                            {
+                                <option value="@time.ToString("yyyy-MM-dd HH:mm")">@time.ToString("HH:mm")</option>
+                            }
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="row mt-3 mb-3">
+                    <div class="col-6">
+                        <label>
+                            First name:
+                            <input name="FirstName" type="text" class="form-control form-control-lg" />
+                        </label>
+                    </div>
+                    <div class="col-6">
+                        <label>
+                            Last name:
+                            <input name="LastName" type="text" class="form-control form-control-lg" />
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <label>Selected service:</label>
+                    <hr />
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <strong>@_service.Name</strong>
+                    </div>
+                    <div class="col-4">
+                        <span class="float-end">@_service.Duration min | @($"£{_service.Price:F2}")</span>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <hr />
+                    <button type="button" class="btn btn-primary">Book</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+}
+
+@code {
+    [Parameter]
+    public int ServiceId { get; set; }
+
+    private Service? _service;
+    private AvailableEmployees? _availableEmployees;
+    private AvailableSlots? _availableSlots;
+    private InputSelect<string>? _times;
+    private string? _baseAddress;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _baseAddress = Configuration.GetSection("ApiBaseAddress").Value;
+        _service = await Http.GetFromJsonAsync<Service>($"{_baseAddress}/services/{ServiceId}");
+        _availableEmployees = await Http.GetFromJsonAsync<AvailableEmployees>($"{_baseAddress}/employees");
+        _availableSlots = await Http.GetFromJsonAsync<AvailableSlots>("sample-data/available-slots.json");
+    }
+
+    private void SelectedEmployeesChanged(ChangeEventArgs e)
+    {
+
+    }
+
+    private void SelectedDayChanged(ChangeEventArgs e)
+    {
+
+    }
+}
