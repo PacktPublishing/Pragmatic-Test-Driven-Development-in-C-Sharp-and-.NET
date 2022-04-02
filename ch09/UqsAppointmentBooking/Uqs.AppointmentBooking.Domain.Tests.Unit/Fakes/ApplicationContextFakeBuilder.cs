@@ -38,10 +38,10 @@ public class ApplicationContextFakeBuilder : IDisposable
         return this;
     }
 
-    public ApplicationContextFakeBuilder WithSingle30MinService()
+    public ApplicationContextFakeBuilder WithSingleService(short min)
     {
         var mensCut = _context.Add(new Service
-        { Name = "Men's Cut", AppointmentTimeSpanInMin = 30, Price = 23, IsActive = true });
+        { Name = "Men's Cut", AppointmentTimeSpanInMin = min, Price = 23, IsActive = true });
 
         return this;
     }
