@@ -21,7 +21,7 @@ public class SlotsService : ISlotService
     public SlotsService(ApplicationContext context, INowService nowService)
     {
         _context = context;
-        _now = GetRoundedToNearestInterval(nowService.Now);
+        _now = RoundUpToNearest(nowService.Now);
     }
 
     public async Task<Slots> GetAvailableSlotsForEmployee(int serviceId, int employeeId)
@@ -44,13 +44,25 @@ public class SlotsService : ISlotService
             
             for(int increment = 0;potentialAppointmentEnd <= shift.Ending;increment += APPOINTMENT_INCREMENT_MIN)
             {
-                potentialAppointmentStart = potentialAppointmentStart.AddMinutes(increment);
+                potentialAppointmentStart = shift.Starting.AddMinutes(increment);
                 potentialAppointmentEnd = potentialAppointmentStart.AddMinutes(service.AppointmentTimeSpanInMin);
                 if (potentialAppointmentEnd <= shift.Ending)
                 {
                     timeIntervals.Add((potentialAppointmentStart, potentialAppointmentEnd));
                 }
             }
+        }
+
+        var appointments = _context.Appointments!.Where(x => x.EmployeeId == employeeId &&
+            x.Ending < openAppointmentsEnd &&
+            (x.Starting <= _now && x.Ending > _now || x.Starting > _now)).ToArray();
+
+        foreach(var appointment in appointments)
+        {
+            DateTime appointmentStartWithRest = appointment.Starting.AddMinutes(-APPOINTMENT_INCREMENT_MIN);
+            DateTime appointmentEndWithRest = appointment.Ending.AddMinutes(APPOINTMENT_INCREMENT_MIN);
+            timeIntervals.RemoveAll(x =>
+                IsPriodIntersecting(x.From, x.To, appointmentStartWithRest, appointmentEndWithRest));
         }
 
         IEnumerable<DateTime> uniqueDays = timeIntervals
@@ -71,14 +83,15 @@ public class SlotsService : ISlotService
         return slots;
     }
 
-    private DateTime GetEndOfOpenAppointments()
-        => _now.Date.AddDays(DAYS);
+    private DateTime GetEndOfOpenAppointments() => _now.Date.AddDays(DAYS);
 
-    private DateTime GetRoundedToNearestInterval(DateTime dt)
+    private DateTime RoundUpToNearest(DateTime dt)
     {
         long ticksInSpan = _roundingIntervalSpan.Ticks;
-        return new DateTime(
-            (dt.Ticks + ticksInSpan - 1) 
+        return new DateTime((dt.Ticks + ticksInSpan - 1) 
             / ticksInSpan * ticksInSpan, dt.Kind);
     }
+
+    private bool IsPriodIntersecting(DateTime fromT1, DateTime toT1, DateTime fromT2, DateTime toT2) 
+        => fromT1 < toT2 && toT1 > fromT2;
 }

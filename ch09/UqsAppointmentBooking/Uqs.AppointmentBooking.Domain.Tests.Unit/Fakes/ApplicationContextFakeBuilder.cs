@@ -15,6 +15,10 @@ public class ApplicationContextFakeBuilder : IDisposable
     private EntityEntry<Employee> _edEmp;
     private EntityEntry<Employee> _oliEmp;
 
+    private EntityEntry<Customer> _paulCust;
+    private EntityEntry<Service> _mensCut;
+    private EntityEntry<Appointment> _appointmentForPaulWithTom;
+
     public ApplicationContextFakeBuilder WithSingleEmployeeTom()
     {
         _tomEmp = _context.Add(new Employee { Name = "Thomas Fringe" });
@@ -40,9 +44,22 @@ public class ApplicationContextFakeBuilder : IDisposable
 
     public ApplicationContextFakeBuilder WithSingleService(short min)
     {
-        var mensCut = _context.Add(new Service
+        _mensCut = _context.Add(new Service
         { Name = "Men's Cut", AppointmentTimeSpanInMin = min, Price = 23, IsActive = true });
 
+        return this;
+    }
+
+    public ApplicationContextFakeBuilder WithSingleCustomerPaul()
+    {
+        _paulCust = _context.Add(new Customer { FirstName = "Paul", LastName = "Longhair" });
+        return this;
+    }
+
+    public ApplicationContextFakeBuilder WithSingleAppointmentForTom(DateTime from, DateTime to)
+    {
+        _appointmentForPaulWithTom = _context.Add(new Appointment { Service = _mensCut.Entity
+            , Customer = _paulCust.Entity, Employee = _tomEmp.Entity, Starting = from, Ending = to });
         return this;
     }
 
