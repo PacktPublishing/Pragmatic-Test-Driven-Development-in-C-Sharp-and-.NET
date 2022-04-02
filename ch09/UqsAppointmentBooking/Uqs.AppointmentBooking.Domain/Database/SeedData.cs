@@ -73,17 +73,17 @@ public static class SeedData
 
         // Services
         var mensCut = await context.AddAsync(new Service 
-        { Name = "Mens Cut", AppointmentTimeSpanInMin = 30, Price = 23, IsActive = true });
+        { Name = "Men's Cut", AppointmentTimeSpanInMin = 30, Price = 23, IsActive = true });
         var mensClipperScissor = await context.AddAsync(new Service
         { Name = "Men - Clipper & Scissor Cut", AppointmentTimeSpanInMin = 30, Price = 23, IsActive = true });
         var mensBeardTrim = await context.AddAsync(new Service
-        { Name = "Mens - Beard Trim", AppointmentTimeSpanInMin = 10, Price = 10, IsActive = true });
+        { Name = "Men - Beard Trim", AppointmentTimeSpanInMin = 10, Price = 10, IsActive = true });
         var mensColoring = await context.AddAsync(new Service
-        { Name = "Mens - Full Head Coloring", AppointmentTimeSpanInMin = 70, Price = 60, IsActive = true });
+        { Name = "Men - Full Head Coloring", AppointmentTimeSpanInMin = 70, Price = 60, IsActive = true });
         var mensPerm = await context.AddAsync(new Service
-        { Name = "Mens - Perm", AppointmentTimeSpanInMin = 100, Price = 90, IsActive = true });
+        { Name = "Men - Perm", AppointmentTimeSpanInMin = 100, Price = 90, IsActive = true });
         var mensKeratin = await context.AddAsync(new Service
-        { Name = "Mens - Keratin Treatment", AppointmentTimeSpanInMin = 120, Price = 100, IsActive = false });
+        { Name = "Men - Keratin Treatment", AppointmentTimeSpanInMin = 120, Price = 100, IsActive = false });
         var boysCut = await context.AddAsync(new Service
         { Name = "Boys - Cut", AppointmentTimeSpanInMin = 30, Price = 15, IsActive = true });
         var girlsCut = await context.AddAsync(new Service

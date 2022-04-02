@@ -9,6 +9,7 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AppointmentBooking")));
 
 // Add services to the container.
+builder.Services.AddScoped<INowService, NowService>();
 builder.Services.AddScoped<IServicesService, ServicesService>();
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
 
