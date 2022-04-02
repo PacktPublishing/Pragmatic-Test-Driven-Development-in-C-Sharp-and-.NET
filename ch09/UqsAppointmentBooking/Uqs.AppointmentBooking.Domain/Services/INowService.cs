@@ -2,6 +2,6 @@
 
 public interface INowService
 {
-    DateTimeOffset Now { get; }
+    DateTime Now { get; }
 }
 

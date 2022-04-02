@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Uqs.AppointmentBooking.Domain.DomainObjects;
 
 namespace Uqs.AppointmentBooking.Domain.Tests.Unit.Fakes;
 
-public class ApplicationContextFakeBuilder
+public class ApplicationContextFakeBuilder : IDisposable
 {
     private readonly ApplicationContextFake _context = new();
     
@@ -33,7 +32,7 @@ public class ApplicationContextFakeBuilder
         return this;
     }
 
-    public ApplicationContextFakeBuilder WithSingleShiftForTom(DateTimeOffset from, DateTimeOffset to)
+    public ApplicationContextFakeBuilder WithSingleShiftForTom(DateTime from, DateTime to)
     {
         _context.Add(new Shift { Employee = _tomEmp.Entity, Starting = from, Ending = to });
         return this;
@@ -73,5 +72,11 @@ public class ApplicationContextFakeBuilder
     {
         _context.SaveChanges();
         return _context;
+    }
+
+    public void Dispose()
+    {
+        _context.Database.EnsureDeleted();
+        _context.Dispose();
     }
 }

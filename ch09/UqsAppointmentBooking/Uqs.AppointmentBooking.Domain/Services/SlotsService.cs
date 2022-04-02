@@ -13,7 +13,7 @@ public interface ISlotService
 public class SlotsService : ISlotService
 {
     private readonly ApplicationContext _context;
-    private readonly DateTimeOffset _now;
+    private readonly DateTime _now;
     internal const byte DAYS = 7;
     internal const byte APPOINTMENT_INCREMENT_MIN = 5;
     private static TimeSpan _roundingIntervalSpan = TimeSpan.FromMinutes(APPOINTMENT_INCREMENT_MIN);
@@ -27,9 +27,9 @@ public class SlotsService : ISlotService
     public async Task<Slots> GetAvailableSlotsForEmployee(int serviceId, int employeeId)
     {
         Service service = await _context.Services!.SingleAsync(x => x.Id == serviceId);
-        DateTimeOffset openAppointmentsEnd = GetEndOfOpenAppointments();
+        DateTime openAppointmentsEnd = GetEndOfOpenAppointments();
 
-        List<(DateTimeOffset From, DateTimeOffset To)> timeIntervals = new();
+        List<(DateTime From, DateTime To)> timeIntervals = new();
 
         var shifts = _context.Shifts!.Where(
             x => x.EmployeeId == employeeId && 
@@ -38,8 +38,8 @@ public class SlotsService : ISlotService
         
         foreach(var shift in shifts)
         {
-            DateTimeOffset potentialAppointmentStart = shift.Starting;
-            DateTimeOffset potentialAppointmentEnd = 
+            DateTime potentialAppointmentStart = shift.Starting;
+            DateTime potentialAppointmentEnd = 
                 potentialAppointmentStart.AddMinutes(service.AppointmentTimeSpanInMin);
             
             for(int increment = 0;potentialAppointmentEnd <= shift.Ending;increment += APPOINTMENT_INCREMENT_MIN)
@@ -53,9 +53,9 @@ public class SlotsService : ISlotService
             }
         }
 
-        IEnumerable<DateTimeOffset> uniqueDays = timeIntervals
+        IEnumerable<DateTime> uniqueDays = timeIntervals
             .DistinctBy(x => x.From.Date)
-            .Select(x => new DateTimeOffset(x.From.DateTime, TimeSpan.Zero));
+            .Select(x => x.From.Date);
 
         List<DaySlots> daySlotsList = new List<DaySlots>();
 
@@ -71,14 +71,14 @@ public class SlotsService : ISlotService
         return slots;
     }
 
-    private DateTimeOffset GetEndOfOpenAppointments()
-        => _now.Date.AddDays(DAYS).AddSeconds(-1);
+    private DateTime GetEndOfOpenAppointments()
+        => _now.Date.AddDays(DAYS);
 
-    private DateTimeOffset GetRoundedToNearestInterval(DateTimeOffset dt)
+    private DateTime GetRoundedToNearestInterval(DateTime dt)
     {
         long ticksInSpan = _roundingIntervalSpan.Ticks;
-        return new DateTimeOffset(
+        return new DateTime(
             (dt.Ticks + ticksInSpan - 1) 
-            / ticksInSpan * ticksInSpan, dt.Offset);
+            / ticksInSpan * ticksInSpan, dt.Kind);
     }
 }

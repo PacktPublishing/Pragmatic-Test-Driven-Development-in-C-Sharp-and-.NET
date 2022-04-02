@@ -1,3 +1,3 @@
 ﻿namespace Uqs.AppointmentBooking.Domain.Report;
 
-public record DaySlots(DateTimeOffset Day, DateTimeOffset[] Times);
+public record DaySlots(DateTime Day, DateTime[] Times);

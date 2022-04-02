@@ -2,5 +2,5 @@
 
 public class NowService : INowService
 {
-    public DateTimeOffset Now => DateTimeOffset.Now;
+    public DateTime Now => DateTime.Now;
 }

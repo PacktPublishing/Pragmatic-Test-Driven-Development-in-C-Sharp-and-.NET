@@ -26,10 +26,10 @@ public static class SeedData
         var oli = await context.AddAsync(new Employee { Name = "Oliver Bold" });
 
         // Shifts
-        DateTimeOffset now = DateTimeOffset.Now;
+        DateTime now = DateTime.Now;
         for (int i = 0;i < 10;i++)
         {
-            DateTimeOffset date = now.AddDays(i);
+            DateTime date = now.AddDays(i);
 
             // Sunday the salon is closed
             if (date.DayOfWeek != DayOfWeek.Sunday)
@@ -92,9 +92,9 @@ public static class SeedData
         context.SaveChanges();
     }
 
-    private static DateTimeOffset SetTime(DateTimeOffset date, string time)
+    private static DateTime SetTime(DateTime date, string time)
     {
         byte[] hourMin = time.Split(":").Select(x => byte.Parse(x)).ToArray();
-        return new DateTimeOffset(date.Year, date.Month, date.Day, hourMin[0], hourMin[1], 0, date.Offset);
+        return new DateTime(date.Year, date.Month, date.Day, hourMin[0], hourMin[1], 0);
     }
 }

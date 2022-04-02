@@ -3,8 +3,8 @@
 public class Appointment
 {
     public int Id { get; set; }
-    public DateTimeOffset Starting { get; set; }
-    public DateTimeOffset Ending { get; set; }
+    public DateTime Starting { get; set; }
+    public DateTime Ending { get; set; }
     public int CustomerId { get; set; }
     public Customer? Customer { get; set; }
     public int EmployeeId { get; set; }

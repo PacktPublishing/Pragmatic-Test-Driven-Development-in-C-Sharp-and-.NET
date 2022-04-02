@@ -8,28 +8,33 @@ using Xunit;
 
 namespace Uqs.AppointmentBooking.Domain.Tests.Unit;
 
-public class SlotsServiceTests
+public class SlotsServiceTests : IDisposable
 {
-    private ApplicationContextFakeBuilder contextBuilder = new();
-    private INowService _nowService = Substitute.For<INowService>();
+    private readonly ApplicationContextFakeBuilder _contextBuilder = new();
+    private readonly INowService _nowService = Substitute.For<INowService>();
     private SlotsService _sut;
+
+    public void Dispose()
+    {
+        _contextBuilder.Dispose();
+    }
 
     [Fact]
     public async Task GetAvailableSlots_NoShiftsForTomAndNoAppointmentsInSystem_NoSlots()
     {
         // Arrange
-        DateTimeOffset appointmentFrom = new DateTimeOffset(2022, 10, 3, 7, 0, 0, TimeSpan.Zero);
+        DateTime appointmentFrom = new DateTime(2022, 10, 3, 7, 0, 0);
         _nowService.Now.Returns(appointmentFrom);
-        var context = contextBuilder
+        var context = _contextBuilder
             .WithSingle30MinService()
             .WithSingleEmployeeTom()
             .Build();
         _sut = new SlotsService(context, _nowService);
         var tom = context.Employees!.Single();
-        var mensCut30min = context.Services!.Single();
+        var mensCut30Min = context.Services!.Single();
 
         // Act
-        var slots = await _sut.GetAvailableSlotsForEmployee(mensCut30min.Id, tom.Id);
+        var slots = await _sut.GetAvailableSlotsForEmployee(mensCut30Min.Id, tom.Id);
 
         // Assert
         var times = slots.DaysSlots.SelectMany(x => x.Times);
@@ -41,12 +46,12 @@ public class SlotsServiceTests
     {
         // Arrange
         const int SERVICE_TIME_MIN = 30;
-        DateTimeOffset shiftFrom = new DateTimeOffset(2022, 10, 3, 9, 0, 0, TimeSpan.Zero);
-        DateTimeOffset shiftTo = shiftFrom.AddMinutes(SERVICE_TIME_MIN);
-        DateTimeOffset appointmentFrom = new DateTimeOffset(2022, 10, 3, 7, 0, 0, TimeSpan.Zero);
+        DateTime shiftFrom = new DateTime(2022, 10, 3, 9, 0, 0);
+        DateTime shiftTo = shiftFrom.AddMinutes(SERVICE_TIME_MIN);
+        DateTime appointmentFrom = new DateTime(2022, 10, 3, 7, 0, 0);
         _nowService.Now.Returns(appointmentFrom);
-        DateTimeOffset expectedSlotTime = new DateTimeOffset(2022, 10, 3, 9, 0, 0, TimeSpan.Zero);
-        var context = contextBuilder
+        DateTime expectedSlotTime = new DateTime(2022, 10, 3, 9, 0, 0);
+        var context = _contextBuilder
             .WithSingle30MinService()
             .WithSingleEmployeeTom()
             .WithSingleShiftForTom(shiftFrom, shiftTo)
@@ -69,12 +74,12 @@ public class SlotsServiceTests
     {
         // Arrange
         const int SERVICE_TIME_MIN = 35;
-        DateTimeOffset shiftFrom = new DateTimeOffset(2022, 10, 3, 9, 0, 0, TimeSpan.Zero);
-        DateTimeOffset shiftTo = shiftFrom.AddMinutes(SERVICE_TIME_MIN);
-        DateTimeOffset appointmentFrom = new DateTimeOffset(2022, 10, 3, 7, 0, 0, TimeSpan.Zero);
+        DateTime shiftFrom = new DateTime(2022, 10, 3, 9, 0, 0);
+        DateTime shiftTo = shiftFrom.AddMinutes(SERVICE_TIME_MIN);
+        DateTime appointmentFrom = new DateTime(2022, 10, 3, 7, 0, 0);
         _nowService.Now.Returns(appointmentFrom);
-        DateTimeOffset expectedSlotTime = new DateTimeOffset(2022, 10, 3, 9, 0, 0, TimeSpan.Zero);
-        var context = contextBuilder
+        DateTime expectedSlotTime = new DateTime(2022, 10, 3, 9, 0, 0);
+        var context = _contextBuilder
             .WithSingle30MinService()
             .WithSingleEmployeeTom()
             .WithSingleShiftForTom(shiftFrom, shiftTo)
