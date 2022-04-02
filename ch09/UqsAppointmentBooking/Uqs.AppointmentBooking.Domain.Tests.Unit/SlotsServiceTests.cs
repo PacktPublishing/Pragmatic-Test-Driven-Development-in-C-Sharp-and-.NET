@@ -63,4 +63,33 @@ public class SlotsServiceTests
         var time = Assert.Single(times);
         Assert.Equal(expectedSlotTime, time);
     }
+
+    [Fact]
+    public async Task GetAvailableSlots_OneShiftEqualsToServiceTimePlusIntervalAndNoExistingAppointments_OneSlotOnly()
+    {
+        // Arrange
+        const int SERVICE_TIME_MIN = 35;
+        DateTimeOffset shiftFrom = new DateTimeOffset(2022, 10, 3, 9, 0, 0, TimeSpan.Zero);
+        DateTimeOffset shiftTo = shiftFrom.AddMinutes(SERVICE_TIME_MIN);
+        DateTimeOffset appointmentFrom = new DateTimeOffset(2022, 10, 3, 7, 0, 0, TimeSpan.Zero);
+        _nowService.Now.Returns(appointmentFrom);
+        DateTimeOffset expectedSlotTime = new DateTimeOffset(2022, 10, 3, 9, 0, 0, TimeSpan.Zero);
+        var context = contextBuilder
+            .WithSingle30MinService()
+            .WithSingleEmployeeTom()
+            .WithSingleShiftForTom(shiftFrom, shiftTo)
+            .Build();
+        _sut = new SlotsService(context, _nowService);
+        var tom = context.Employees!.Single();
+        var mensCut30min = context.Services!.Single();
+
+        // Act
+        var slots = await _sut.GetAvailableSlotsForEmployee(mensCut30min.Id, tom.Id);
+
+        // Assert
+        var times = slots.DaysSlots.SelectMany(x => x.Times).ToArray();
+        Assert.Equal(2, times.Count());
+        Assert.Equal(shiftFrom, times[0]);
+        Assert.Equal(shiftFrom.AddMinutes(5), times[1]);
+    }
 }

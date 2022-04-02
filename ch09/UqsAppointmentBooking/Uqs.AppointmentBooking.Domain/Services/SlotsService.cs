@@ -53,7 +53,9 @@ public class SlotsService : ISlotService
             }
         }
 
-        IEnumerable<DateTimeOffset> uniqueDays = timeIntervals.DistinctBy(x => x.From.DateTime).Select(x => x.From);
+        IEnumerable<DateTimeOffset> uniqueDays = timeIntervals
+            .DistinctBy(x => x.From.Date)
+            .Select(x => new DateTimeOffset(x.From.DateTime, TimeSpan.Zero));
 
         List<DaySlots> daySlotsList = new List<DaySlots>();
 
