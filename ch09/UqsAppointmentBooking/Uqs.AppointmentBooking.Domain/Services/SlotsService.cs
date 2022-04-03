@@ -1,39 +1,41 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Uqs.AppointmentBooking.Database.Domain;
 using Uqs.AppointmentBooking.Domain.DomainObjects;
 using Uqs.AppointmentBooking.Domain.Report;
 
 namespace Uqs.AppointmentBooking.Domain.Services;
 
-public interface ISlotService
+public interface ISlotsService
 {
     Task<Slots> GetAvailableSlotsForEmployee(int serviceId, int employeeId);
 }
 
-public class SlotsService : ISlotService
+public class SlotsService : ISlotsService
 {
     private readonly ApplicationContext _context;
+    private readonly ApplicationSettings _settings;
     private readonly DateTime _now;
-    internal const byte DAYS = 7;
-    internal const byte APPOINTMENT_INCREMENT_MIN = 5;
-    private static TimeSpan _roundingIntervalSpan = TimeSpan.FromMinutes(APPOINTMENT_INCREMENT_MIN);
+    private readonly TimeSpan _roundingIntervalSpan;
 
-    public SlotsService(ApplicationContext context, INowService nowService)
+    public SlotsService(ApplicationContext context, INowService nowService, IOptions<ApplicationSettings> settings)
     {
         _context = context;
+        _settings = settings.Value;
+        _roundingIntervalSpan = TimeSpan.FromMinutes(_settings.RoundUpInMin);
         _now = RoundUpToNearest(nowService.Now);
     }
 
     public async Task<Slots> GetAvailableSlotsForEmployee(int serviceId, int employeeId)
     {
         Service service = await _context.Services!.SingleAsync(x => x.Id == serviceId);
-        DateTime openAppointmentsEnd = GetEndOfOpenAppointments();
+        DateTime appointmentsMaxDay = GetEndOfOpenAppointments();
 
         List<(DateTime From, DateTime To)> timeIntervals = new();
 
         var shifts = _context.Shifts!.Where(
             x => x.EmployeeId == employeeId && 
-            x.Ending < openAppointmentsEnd &&
+            x.Ending < appointmentsMaxDay &&
             (x.Starting <= _now && x.Ending > _now || x.Starting > _now));
         
         foreach(var shift in shifts)
@@ -42,7 +44,7 @@ public class SlotsService : ISlotService
             DateTime potentialAppointmentEnd = 
                 potentialAppointmentStart.AddMinutes(service.AppointmentTimeSpanInMin);
             
-            for(int increment = 0;potentialAppointmentEnd <= shift.Ending;increment += APPOINTMENT_INCREMENT_MIN)
+            for(int increment = 0;potentialAppointmentEnd <= shift.Ending;increment += _settings.RoundUpInMin)
             {
                 potentialAppointmentStart = shift.Starting.AddMinutes(increment);
                 potentialAppointmentEnd = potentialAppointmentStart.AddMinutes(service.AppointmentTimeSpanInMin);
@@ -54,13 +56,13 @@ public class SlotsService : ISlotService
         }
 
         var appointments = _context.Appointments!.Where(x => x.EmployeeId == employeeId &&
-            x.Ending < openAppointmentsEnd &&
+            x.Ending < appointmentsMaxDay &&
             (x.Starting <= _now && x.Ending > _now || x.Starting > _now)).ToArray();
 
         foreach(var appointment in appointments)
         {
-            DateTime appointmentStartWithRest = appointment.Starting.AddMinutes(-APPOINTMENT_INCREMENT_MIN);
-            DateTime appointmentEndWithRest = appointment.Ending.AddMinutes(APPOINTMENT_INCREMENT_MIN);
+            DateTime appointmentStartWithRest = appointment.Starting.AddMinutes(-_settings.RestInMin);
+            DateTime appointmentEndWithRest = appointment.Ending.AddMinutes(_settings.RestInMin);
             timeIntervals.RemoveAll(x =>
                 IsPriodIntersecting(x.From, x.To, appointmentStartWithRest, appointmentEndWithRest));
         }
@@ -83,7 +85,8 @@ public class SlotsService : ISlotService
         return slots;
     }
 
-    private DateTime GetEndOfOpenAppointments() => _now.Date.AddDays(DAYS);
+    private DateTime GetEndOfOpenAppointments() => _now.Date.AddDays(
+        _settings.OpenAppointmentInDays);
 
     private DateTime RoundUpToNearest(DateTime dt)
     {

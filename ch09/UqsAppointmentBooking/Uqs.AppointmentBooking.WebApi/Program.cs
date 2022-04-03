@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Uqs.AppointmentBooking.Database.Domain;
+using Uqs.AppointmentBooking.Domain;
 using Uqs.AppointmentBooking.Domain.Database;
 using Uqs.AppointmentBooking.Domain.Services;
 
@@ -12,7 +13,8 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 builder.Services.AddScoped<INowService, NowService>();
 builder.Services.AddScoped<IServicesService, ServicesService>();
 builder.Services.AddScoped<IEmployeesService, EmployeesService>();
-
+builder.Services.AddScoped<ISlotsService, SlotsService>();
+builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection(nameof(ApplicationSettings)));
 builder.Services.AddControllers();
 
 var app = builder.Build();

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using NSubstitute;
 using System;
 using System.Linq;
@@ -12,7 +13,17 @@ public class SlotsServiceTests : IDisposable
 {
     private readonly ApplicationContextFakeBuilder _contextBuilder = new();
     private readonly INowService _nowService = Substitute.For<INowService>();
+    private readonly ApplicationSettings _applicationSettings = 
+        new ApplicationSettings {
+        OpenAppointmentInDays = 7, RoundUpInMin = 5, RestInMin = 5 };
+    private readonly IOptions<ApplicationSettings> _settings = 
+        Substitute.For<IOptions<ApplicationSettings>>();
     private SlotsService? _sut;
+
+    public SlotsServiceTests()
+    {
+        _settings.Value.Returns(_applicationSettings);
+    }
 
     public void Dispose()
     {
@@ -29,7 +40,7 @@ public class SlotsServiceTests : IDisposable
             .WithSingleService(30)
             .WithSingleEmployeeTom()
             .Build();
-        _sut = new SlotsService(context, _nowService);
+        _sut = new SlotsService(context, _nowService, _settings);
         var tom = context.Employees!.Single();
         var mensCut30Min = context.Services!.Single();
 
@@ -59,7 +70,7 @@ public class SlotsServiceTests : IDisposable
             .WithSingleEmployeeTom()
             .WithSingleShiftForTom(shiftFrom, shiftTo)
             .Build();
-        _sut = new SlotsService(context, _nowService);
+        _sut = new SlotsService(context, _nowService, _settings);
         var tom = context.Employees!.Single();
         var mensCut30Min = context.Services!.Single();
 
@@ -79,6 +90,7 @@ public class SlotsServiceTests : IDisposable
     [Theory]
     [InlineData("2022-10-03 09:00:00", "2022-10-03 11:10:00", 0)]
     [InlineData("2022-10-03 09:30:00", "2022-10-03 11:10:00", 0)]
+    [InlineData("2022-10-03 09:00:00", "2022-10-03 10:45:00", 0)]
     [InlineData("2022-10-03 09:35:00", "2022-10-03 11:10:00", 1, "2022-10-03 09:00:00")]
     [InlineData("2022-10-03 09:40:00", "2022-10-03 11:10:00", 2, "2022-10-03 09:00:00", "2022-10-03 09:05:00")]
     [InlineData("2022-10-03 09:00:00", "2022-10-03 10:30:00", 2, "2022-10-03 10:35:00", "2022-10-03 10:40:00")]
@@ -100,7 +112,7 @@ public class SlotsServiceTests : IDisposable
             .WithSingleCustomerPaul()
             .WithSingleAppointmentForTom(appointmentStart, appointmentEnd)
             .Build();
-        _sut = new SlotsService(context, _nowService);
+        _sut = new SlotsService(context, _nowService, _settings);
         var tom = context.Employees!.Single();
         var mensCut30Min = context.Services!.Single();
 
