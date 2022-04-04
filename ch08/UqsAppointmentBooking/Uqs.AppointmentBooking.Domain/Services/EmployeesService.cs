@@ -9,11 +9,6 @@ public interface IEmployeesService
 
 public class EmployeesService : IEmployeesService
 {
-    public EmployeesService()
-    {
-    
-    }
-
     public async Task<IEnumerable<Employee>> GetEmployees()
         => throw new NotImplementedException();
 }

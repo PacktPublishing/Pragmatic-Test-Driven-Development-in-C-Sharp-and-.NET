@@ -11,10 +11,6 @@ public interface IServicesService
 
 public class ServicesService : IServicesService
 {
-    public ServicesService()
-    {
-
-    }
 
     public async Task<IEnumerable<Service>> GetActiveServices()
         => throw new NotImplementedException();

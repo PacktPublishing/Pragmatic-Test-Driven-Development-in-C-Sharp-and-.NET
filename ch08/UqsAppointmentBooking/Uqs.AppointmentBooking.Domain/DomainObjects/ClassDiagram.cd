@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Uqs.AppointmentBooking.Domain.DomainObjects.Appointment">
+    <Position X="7.75" Y="2.25" Width="1.75" />
+    <AssociationLine Name="Service" Type="Uqs.AppointmentBooking.Domain.DomainObjects.Service" FixedToPoint="true">
+      <Path>
+        <Point X="7.75" Y="3.188" />
+        <Point X="6.5" Y="3.188" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAECACAAEAAAAAAAAAAAAAAACAAAQBAABAAAAAACAAA=</HashCode>
+      <FileName>DomainObjects\Appointment.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Customer" />
+      <Property Name="Employee" />
+      <Property Name="Service" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Uqs.AppointmentBooking.Domain.DomainObjects.Customer">
+    <Position X="10.5" Y="2.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>DomainObjects\Customer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Uqs.AppointmentBooking.Domain.DomainObjects.Employee">
+    <Position X="7.75" Y="4.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DomainObjects\Employee.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Uqs.AppointmentBooking.Domain.DomainObjects.Service">
+    <Position X="5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAQAAAAAAEAAAAAQAAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>DomainObjects\Service.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Uqs.AppointmentBooking.Domain.DomainObjects.Shift">
+    <Position X="10.5" Y="4.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAEAAAAAAAAAAAAAAACAAAAAAABAAAAAACAAA=</HashCode>
+      <FileName>DomainObjects\Shift.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Employee" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
