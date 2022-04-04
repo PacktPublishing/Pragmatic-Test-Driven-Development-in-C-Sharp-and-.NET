@@ -18,8 +18,6 @@ public class SlotsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<Contract.AvailableSlots>> GetSlots(int serviceId, int? employeeId)
     {
-        var slots = await _slotsService.GetAvailableSlotsForEmployee(serviceId, employeeId!.Value);
-       
         return null!;
     }
 }
