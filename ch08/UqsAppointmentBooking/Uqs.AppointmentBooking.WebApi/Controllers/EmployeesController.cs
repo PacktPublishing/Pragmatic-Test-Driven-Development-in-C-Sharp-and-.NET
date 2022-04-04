@@ -17,10 +17,7 @@ public class EmployeesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<Contract.AvailableEmployees>> AvailableEmployees()
     {
-        var employees = await _employeesService.GetEmployees();
-        Contract.Employee[] emps = employees.Select(
-            x => new Contract.Employee(x.Id, x.Name!)).ToArray();
-        return new Contract.AvailableEmployees(emps);
+        throw new NotImplementedException();
     }
 
 }

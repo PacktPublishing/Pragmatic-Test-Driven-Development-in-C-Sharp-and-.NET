@@ -18,6 +18,6 @@ public class SlotsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<Contract.AvailableSlots>> GetSlots(int serviceId, int? employeeId)
     {
-        return null!;
+        throw new NotImplementedException();
     }
 }
