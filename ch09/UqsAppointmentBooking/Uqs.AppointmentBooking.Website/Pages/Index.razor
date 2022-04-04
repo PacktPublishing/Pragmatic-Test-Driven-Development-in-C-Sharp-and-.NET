@@ -4,9 +4,9 @@
 
 <PageTitle>Our Services - Heads Up Barbers</PageTitle>
 
-<h1>Our Services</h1>
+<div class="container">
 
-Please select a service to see available slots
+<h1>Our Services</h1>
 
 @if (_availableServices is null)
 {
@@ -14,6 +14,7 @@ Please select a service to see available slots
 }
 else
 {
+    <p>Please select a service to see available slots</p>
     <table class="table">
         <thead>
             <tr>
@@ -39,7 +40,7 @@ else
         </tbody>
     </table>
 }
-
+</div>
 @code {
     private AvailableServices? _availableServices;
 
