@@ -29,7 +29,7 @@ public class AddPostService : IAddPostService
         {
             throw new InvalidOperationException("The author is locked");
         }
-        int newPostId = _postRepository.CreatePost(authorId);
+        var newPostId = _postRepository.CreatePost(authorId);
         return newPostId;
     }
 }
