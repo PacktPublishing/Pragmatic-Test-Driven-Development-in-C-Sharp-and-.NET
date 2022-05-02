@@ -4,8 +4,6 @@
 
 <PageTitle>Booking - Heads Up Barbers</PageTitle>
 
-<h1>Booking</h1>
-
 @if (_service is null || _availableEmployees is null)
 {
     <p><em>Loading...</em></p>
@@ -15,6 +13,7 @@ else
 <form action="https://localhost:1234/book" method="post">
     <input name="ServiceId" type="hidden" value="@ServiceId" />
     <div class="container">
+        <h1>Booking</h1>
         <div class="row gx-5">
             <div class="col-4">
                 <div class="row">
