@@ -46,7 +46,12 @@ public class ApplicationContextFakeBuilder : IDisposable
     {
         _mensCut = _context.Add(new Service
         { Name = "Men's Cut", AppointmentTimeSpanInMin = min, Price = 23, IsActive = true });
+        return this;
+    }
 
+    public ApplicationContextFakeBuilder WithSingleService(bool isActive)
+    {
+        _context.Add(new Service{ IsActive = isActive });
         return this;
     }
 
