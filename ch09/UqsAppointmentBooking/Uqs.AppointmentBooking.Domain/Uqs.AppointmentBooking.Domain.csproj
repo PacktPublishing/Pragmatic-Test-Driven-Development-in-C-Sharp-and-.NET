@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Uqs.AppointmentBooking.Contract\Uqs.AppointmentBooking.Contract.csproj" />
+    <Compile Remove="Repositories\**" />
+    <EmbeddedResource Remove="Repositories\**" />
+    <None Remove="Repositories\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
+    <ProjectReference Include="..\Uqs.AppointmentBooking.Contract\Uqs.AppointmentBooking.Contract.csproj" />
   </ItemGroup>
 
   <ItemGroup>
