@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Uqs.AppointmentBooking.Database.Domain;
 using Uqs.AppointmentBooking.Domain;
 using Uqs.AppointmentBooking.Domain.Database;
 using Uqs.AppointmentBooking.Domain.Services;

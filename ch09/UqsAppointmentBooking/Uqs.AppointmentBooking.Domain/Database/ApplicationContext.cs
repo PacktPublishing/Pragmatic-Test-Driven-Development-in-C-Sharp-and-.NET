@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Uqs.AppointmentBooking.Domain.DomainObjects;
 
-namespace Uqs.AppointmentBooking.Database.Domain;
+namespace Uqs.AppointmentBooking.Domain.Database;
 
 public class ApplicationContext : DbContext
 {

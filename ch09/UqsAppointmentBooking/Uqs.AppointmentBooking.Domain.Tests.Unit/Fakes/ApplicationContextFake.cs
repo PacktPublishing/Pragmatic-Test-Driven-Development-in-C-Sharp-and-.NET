@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using Uqs.AppointmentBooking.Database.Domain;
+using Uqs.AppointmentBooking.Domain.Database;
 
 namespace Uqs.AppointmentBooking.Domain.Tests.Unit.Fakes;
 

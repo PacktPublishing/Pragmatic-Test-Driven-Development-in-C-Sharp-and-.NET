@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Uqs.AppointmentBooking.Database.Domain;
+using Uqs.AppointmentBooking.Domain.Database;
 using Uqs.AppointmentBooking.Domain.DomainObjects;
 using Uqs.AppointmentBooking.Domain.Report;
 
@@ -28,20 +28,29 @@ public class SlotsService : ISlotsService
 
     public async Task<Slots> GetAvailableSlotsForEmployee(int serviceId, int employeeId)
     {
-        Service service = await _context.Services!.SingleAsync(x => x.Id == serviceId);
-        DateTime appointmentsMaxDay = GetEndOfOpenAppointments();
+        var service = await _context.Services!.SingleOrDefaultAsync(x => x.Id == serviceId);
+        if (service is null)
+        {
+            throw new ArgumentException("Record not found", nameof(serviceId));
+        }
+        var isEmpFound = await _context.Employees!.AnyAsync(x => x.Id == employeeId);
+        if (!isEmpFound)
+        {
+            throw new ArgumentException("Record not found", nameof(employeeId));
+        }
+        var appointmentsMaxDay = GetEndOfOpenAppointments();
 
         List<(DateTime From, DateTime To)> timeIntervals = new();
 
         var shifts = _context.Shifts!.Where(
             x => x.EmployeeId == employeeId && 
             x.Ending < appointmentsMaxDay &&
-            (x.Starting <= _now && x.Ending > _now || x.Starting > _now));
+            ((x.Starting <= _now && x.Ending > _now) || x.Starting > _now));
         
         foreach(var shift in shifts)
         {
-            DateTime potentialAppointmentStart = shift.Starting;
-            DateTime potentialAppointmentEnd = 
+            var potentialAppointmentStart = shift.Starting;
+            var potentialAppointmentEnd = 
                 potentialAppointmentStart.AddMinutes(service.AppointmentTimeSpanInMin);
             
             for(int increment = 0;potentialAppointmentEnd <= shift.Ending;increment += _settings.RoundUpInMin)
@@ -57,21 +66,21 @@ public class SlotsService : ISlotsService
 
         var appointments = _context.Appointments!.Where(x => x.EmployeeId == employeeId &&
             x.Ending < appointmentsMaxDay &&
-            (x.Starting <= _now && x.Ending > _now || x.Starting > _now)).ToArray();
+            ((x.Starting <= _now && x.Ending > _now) || x.Starting > _now)).ToArray();
 
         foreach(var appointment in appointments)
         {
             DateTime appointmentStartWithRest = appointment.Starting.AddMinutes(-_settings.RestInMin);
             DateTime appointmentEndWithRest = appointment.Ending.AddMinutes(_settings.RestInMin);
             timeIntervals.RemoveAll(x =>
-                IsPriodIntersecting(x.From, x.To, appointmentStartWithRest, appointmentEndWithRest));
+                IsPeriodIntersecting(x.From, x.To, appointmentStartWithRest, appointmentEndWithRest));
         }
 
-        IEnumerable<DateTime> uniqueDays = timeIntervals
+        var uniqueDays = timeIntervals
             .DistinctBy(x => x.From.Date)
             .Select(x => x.From.Date);
 
-        List<DaySlots> daySlotsList = new List<DaySlots>();
+        var daySlotsList = new List<DaySlots>();
 
         foreach(var day in uniqueDays)
         {
@@ -90,11 +99,11 @@ public class SlotsService : ISlotsService
 
     private DateTime RoundUpToNearest(DateTime dt)
     {
-        long ticksInSpan = _roundingIntervalSpan.Ticks;
+        var ticksInSpan = _roundingIntervalSpan.Ticks;
         return new DateTime((dt.Ticks + ticksInSpan - 1) 
             / ticksInSpan * ticksInSpan, dt.Kind);
     }
 
-    private bool IsPriodIntersecting(DateTime fromT1, DateTime toT1, DateTime fromT2, DateTime toT2) 
+    private bool IsPeriodIntersecting(DateTime fromT1, DateTime toT1, DateTime fromT2, DateTime toT2) 
         => fromT1 < toT2 && toT1 > fromT2;
 }
