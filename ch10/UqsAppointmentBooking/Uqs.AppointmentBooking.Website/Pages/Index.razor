@@ -1,0 +1,52 @@
+﻿@page "/"
+@inject HttpClient Http
+@inject IConfiguration Configuration
+
+<PageTitle>Our Services - Heads Up Barbers</PageTitle>
+
+<div class="container">
+
+<h1>Our Services</h1>
+
+@if (_availableServices is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>Please select a service to see available slots</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Service</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var service in _availableServices.Services)
+            {
+                var bookingUrl = $"booking/{service.ServiceId}";
+                <tr>
+                    <td>@service.Name</td>
+                    <td class="text-end">@($"£{service.Price:F2}")</td>
+                    <td>
+                        <NavLink class="font-weight-bold link-dark text-decoration-none" href="@bookingUrl">
+                            <span class="oi oi-calendar me-2" aria-hidden="true"></span> Select
+                        </NavLink>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+</div>
+@code {
+    private AvailableServices? _availableServices;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _availableServices = await Http.GetFromJsonAsync<AvailableServices>(
+            $"{Configuration.GetSection("ApiBaseAddress").Value}/services");
+    }
+}
