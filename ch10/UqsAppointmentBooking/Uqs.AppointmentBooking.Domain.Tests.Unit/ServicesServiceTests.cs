@@ -1,28 +1,23 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using Uqs.AppointmentBooking.Domain.Repository;
 using Uqs.AppointmentBooking.Domain.Services;
-using Uqs.AppointmentBooking.Domain.Tests.Unit.Fakes;
+using NSubstitute;
 using Xunit;
+using Uqs.AppointmentBooking.Domain.DomainObjects;
 
 namespace Uqs.AppointmentBooking.Domain.Tests.Unit;
 
-public class ServicesServiceTests : IDisposable
+public class ServicesServiceTests
 {
-    private readonly ApplicationContextFakeBuilder _ctxBldr = new();
+    private readonly IServiceRepository _serviceRepository = Substitute.For<IServiceRepository>();
     private ServicesService? _sut;
-
-    public void Dispose()
-    {
-        _ctxBldr.Dispose();
-    }
 
     [Fact]
     public async Task GetActiveServices_NoServiceInTheSystem_NoServices()
     {
         // Arrange
-        var ctx = _ctxBldr.Build();
-        _sut = new ServicesService(ctx);
+        _sut = new ServicesService(_serviceRepository);
 
         // Act
         var actual = await _sut.GetActiveServices();
@@ -35,12 +30,12 @@ public class ServicesServiceTests : IDisposable
     public async Task GetActiveServices_TwoActiveOneInactiveService_TwoServices()
     {
         // Arrange
-        var ctx = _ctxBldr
-            .WithSingleService(true)
-            .WithSingleService(true)
-            .WithSingleService(false)
-            .Build();
-        _sut = new ServicesService(ctx);
+        _serviceRepository.GetActiveServices()
+            .Returns(new Service[] {
+                new Service{IsActive = true},
+                new Service{IsActive = true},
+            });
+        _sut = new ServicesService(_serviceRepository);
         var expected = 2;
 
         // Act
