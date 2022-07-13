@@ -20,7 +20,6 @@ else
                     <label>
                         Select employee:
                         <select name="EmployeeId" class="form-select form-select-lg mb-3" @onchange="SelectedEmployeesChanged">
-                            <option selected value="">[Any employee]</option>
                             @foreach (var employee in _availableEmployees.Employees)
                             {
                                 <option value="@employee.EmployeeId">@employee.Name</option>
@@ -31,7 +30,7 @@ else
                 <div class="row">
                     <label>
                         Select day for your appointment:
-                        <input type="Date" class="form-select form-select-lg mb-3" @onchange="SelectedDayChanged" value="@DateTime.Today.ToString("yyyy-MM-dd")" min="@_availableSlots.DaysSlots.Min(x => x.Day).ToString("yyyy-MM-dd")" max="@_availableSlots.DaysSlots.Max(x => x.Day).ToString("yyyy-MM-dd")" />
+                        <input type="Date" class="form-select form-select-lg mb-3" value="@DateTime.Today.ToString("yyyy-MM-dd")" min="@_availableSlots.DaysSlots.Min(x => x.Day).ToString("yyyy-MM-dd")" max="@_availableSlots.DaysSlots.Max(x => x.Day).ToString("yyyy-MM-dd")" />
                     </label>
                 </div>
                 <div class="row">
@@ -99,16 +98,13 @@ else
         _baseAddress = Configuration.GetSection("ApiBaseAddress").Value;
         _service = await Http.GetFromJsonAsync<Service>($"{_baseAddress}/services/{ServiceId}");
         _availableEmployees = await Http.GetFromJsonAsync<AvailableEmployees>($"{_baseAddress}/employees");
-        _availableSlots = await Http.GetFromJsonAsync<AvailableSlots>("sample-data/available-slots.json");
+        _availableSlots = await Http.GetFromJsonAsync<AvailableSlots>($"{_baseAddress}/slots/{ServiceId}?employeeId=" + 
+            $"{_availableEmployees.Employees.First().EmployeeId}");
     }
 
-    private void SelectedEmployeesChanged(ChangeEventArgs e)
+    private async Task SelectedEmployeesChanged(ChangeEventArgs e)
     {
-
+        _availableSlots = await Http.GetFromJsonAsync<AvailableSlots>($"{_baseAddress}/slots/{ServiceId}?employeeId={e.Value!.ToString()}");
     }
 
-    private void SelectedDayChanged(ChangeEventArgs e)
-    {
-
-    }
 }

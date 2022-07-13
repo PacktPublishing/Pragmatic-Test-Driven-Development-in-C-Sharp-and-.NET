@@ -25,6 +25,8 @@ public static class SeedData
 
         await databaseResponse.Database.CreateContainerIfNotExistsAsync(nameof(Employee), "/id");
         await databaseResponse.Database.CreateContainerIfNotExistsAsync(nameof(Service), "/id");
+        await databaseResponse.Database.CreateContainerIfNotExistsAsync(nameof(Appointment), "/id");
+
 
         var employeeRepository = serviceProvider.GetRequiredService<IEmployeeRepository>();
 
@@ -137,8 +139,23 @@ public static class SeedData
         var girlsCut = new Service
         { Id = Guid.NewGuid().ToString(), Name = "Girls - Cut", AppointmentTimeSpanInMin = 30, Price = 17, IsActive = true };
         await serviceRepository.AddItemAsync(girlsCut);
+
+        // Appointments
+        var appointmentRepository = serviceProvider.GetRequiredService<IAppointmentRepository>();
+
+        var appointment1 = new Appointment
+        { Id = Guid.NewGuid().ToString(), CustomerId = paul.Id, EmployeeId = tom.Id, ServiceId = mensCut.Id, Starting = GetFirstMonday() };
+        await appointmentRepository.AddItemAsync(appointment1);
     }
 
+    private static DateTime GetFirstMonday()
+    {
+        DateTime now = SetTime(DateTime.Now.Date, "9:30");
+        int diff = DayOfWeek.Monday - now.DayOfWeek;
+        DateTime monday = now.AddDays(diff);
+
+        return monday;
+    }
 
     private static DateTime SetTime(DateTime date, string time)
     {

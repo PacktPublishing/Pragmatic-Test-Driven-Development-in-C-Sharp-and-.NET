@@ -15,16 +15,19 @@ public class SlotsService : ISlotsService
 {
     private readonly IServiceRepository _serviceRepository;
     private readonly IEmployeeRepository _employeeRepository;
+    private readonly IAppointmentRepository _appointmentRepository;
     private readonly ApplicationSettings _settings;
     private readonly DateTime _now;
     private readonly TimeSpan _roundingIntervalSpan;
 
     public SlotsService(IServiceRepository serviceRepository,
         IEmployeeRepository employeeRepository,
+        IAppointmentRepository appointmentRepository,
         INowService nowService, IOptions<ApplicationSettings> settings)
     {
         _serviceRepository = serviceRepository;
         _employeeRepository = employeeRepository;
+        _appointmentRepository = appointmentRepository;
         _settings = settings.Value;
         _roundingIntervalSpan = TimeSpan.FromMinutes(_settings.RoundUpInMin);
         _now = RoundUpToNearest(nowService.Now);
@@ -66,8 +69,8 @@ public class SlotsService : ISlotsService
                 }
             }
         }
-
-        var appointments = employee.Appointments!.Where(x =>
+        var employeeAppointments = await _appointmentRepository.GetAppoitmentsByEmployeeId(employeeId);
+        var appointments = employeeAppointments.Where(x =>
             x.Ending < appointmentsMaxDay &&
             ((x.Starting <= _now && x.Ending > _now) || x.Starting > _now)).ToArray();
 
