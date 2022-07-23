@@ -6,7 +6,7 @@ namespace Uqs.AppointmentBooking.Domain.Repository;
 
 public interface IAppointmentRepository : ICosmosRepository<Appointment>
 {
-    Task<IEnumerable<Appointment>> GetAppoitmentsByEmployeeIdAsync(string employeeId);
+    Task<IEnumerable<Appointment>> GetAppointmentsByEmployeeIdAsync(string employeeId);
 }
 
 public class AppointmentRepository : CosmosRepository<Appointment>, IAppointmentRepository
@@ -16,7 +16,7 @@ public class AppointmentRepository : CosmosRepository<Appointment>, IAppointment
     {
     }
 
-    public async Task<IEnumerable<Appointment>> GetAppoitmentsByEmployeeIdAsync(string employeeId)
+    public async Task<IEnumerable<Appointment>> GetAppointmentsByEmployeeIdAsync(string employeeId)
     {
         var queryDefinition = new QueryDefinition("SELECT * FROM c");
         var appointments = await GetItemsAsync(queryDefinition);

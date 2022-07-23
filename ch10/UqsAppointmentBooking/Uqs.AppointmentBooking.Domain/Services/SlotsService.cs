@@ -69,7 +69,7 @@ public class SlotsService : ISlotsService
                 }
             }
         }
-        var employeeAppointments = await _appointmentRepository.GetAppoitmentsByEmployeeIdAsync(employeeId);
+        var employeeAppointments = await _appointmentRepository.GetAppointmentsByEmployeeIdAsync(employeeId);
         var appointments = employeeAppointments.Where(x =>
             x.Ending < appointmentsMaxDay &&
             ((x.Starting <= _now && x.Ending > _now) || x.Starting > _now)).ToArray();

@@ -19,7 +19,7 @@ public abstract class CosmosRepository<T> : ICosmosRepository<T> where T : IEnti
 
     public Task AddItemAsync(T item)
     {
-        return Container.CreateItemAsync<T>(item, new PartitionKey(item.Id));
+        return Container.CreateItemAsync(item, new PartitionKey(item.Id));
     }
 
     public Task DeleteItemAsync(string id)
@@ -55,6 +55,6 @@ public abstract class CosmosRepository<T> : ICosmosRepository<T> where T : IEnti
 
     public async Task UpdateItemAsync(string id, T item)
     {
-        await Container.UpsertItemAsync<T>(item, new PartitionKey(id));
+        await Container.UpsertItemAsync(item, new PartitionKey(id));
     }
 }

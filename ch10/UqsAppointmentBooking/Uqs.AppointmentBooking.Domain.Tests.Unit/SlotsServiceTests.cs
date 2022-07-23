@@ -69,7 +69,7 @@ public class SlotsServiceTests
         // Arrange
         DateTime appointmentFrom = new DateTime(2022, 10, 3, 7, 0, 0);
         _nowService.Now.Returns(appointmentFrom);
-        var tom = new Employee { Id = "Tom", Name = "Thomas Fringe", Shifts = new Shift[0] };
+        var tom = new Employee { Id = "Tom", Name = "Thomas Fringe", Shifts = Array.Empty<Shift>() };
         var mensCut30Min = new Service { Id = "MensCut30Min", AppointmentTimeSpanInMin = 30 };
         _serviceRepository.GetItemAsync(Arg.Any<string>())
             .Returns(Task.FromResult((Service?)mensCut30Min));
@@ -100,14 +100,14 @@ public class SlotsServiceTests
         var tom = new Employee { Id = "Tom", Name = "Thomas Fringe", Shifts = 
             new [] { new Shift { Starting = shiftFrom, Ending = shiftTo } } };
         var mensCut30Min = new Service { Id = "MensCut30Min", AppointmentTimeSpanInMin = 30 };
-        var tomAppoitments = new Appointment[0];
+        var tomAppointments = Array.Empty<Appointment>();
 
         _serviceRepository.GetItemAsync(Arg.Any<string>())
             .Returns(Task.FromResult((Service?)mensCut30Min));
         _employeeRepository.GetItemAsync(Arg.Any<string>())
             .Returns(Task.FromResult((Employee?)tom));
-        _appointmentRepository.GetAppoitmentsByEmployeeIdAsync(Arg.Is("Tom"))
-            .Returns(Task.FromResult((IEnumerable<Appointment>)tomAppoitments));
+        _appointmentRepository.GetAppointmentsByEmployeeIdAsync(Arg.Is("Tom"))
+            .Returns(Task.FromResult((IEnumerable<Appointment>)tomAppointments));
 
         _sut = new SlotsService(_serviceRepository, _employeeRepository, _appointmentRepository, 
             _nowService, _settings);
@@ -147,15 +147,15 @@ public class SlotsServiceTests
             new [] { new Shift { Starting = shiftFrom, Ending = shiftTo } } };
         var mensCut30Min = new Service { Id = "MensCut30Min", AppointmentTimeSpanInMin = 30 };
         var paul = new Customer { Id = "Paul", FirstName = "Paul", LastName = "Longhair" };
-        var tomAppoitments = new[] { new Appointment { CustomerId = paul.Id, 
+        var tomAppointments = new[] { new Appointment { CustomerId = paul.Id, 
             ServiceId = mensCut30Min.Id, Starting = appointmentStart , Ending = appointmentEnd } };
 
         _serviceRepository.GetItemAsync(Arg.Any<string>())
             .Returns(Task.FromResult((Service?)mensCut30Min));
         _employeeRepository.GetItemAsync(Arg.Any<string>())
             .Returns(Task.FromResult((Employee?)tom));
-        _appointmentRepository.GetAppoitmentsByEmployeeIdAsync(Arg.Is("Tom"))
-            .Returns(Task.FromResult((IEnumerable<Appointment>)tomAppoitments));
+        _appointmentRepository.GetAppointmentsByEmployeeIdAsync(Arg.Is("Tom"))
+            .Returns(Task.FromResult((IEnumerable<Appointment>)tomAppointments));
 
         _sut = new SlotsService(_serviceRepository, _employeeRepository, _appointmentRepository,
             _nowService, _settings);

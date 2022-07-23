@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace Uqs.AppointmentBooking.Domain.DomainObjects;
+﻿namespace Uqs.AppointmentBooking.Domain.DomainObjects;
 
 public class Customer : IEntity
 {

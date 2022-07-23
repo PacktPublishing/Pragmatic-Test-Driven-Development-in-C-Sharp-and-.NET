@@ -8,7 +8,7 @@ namespace Uqs.AppointmentBooking.Domain.Database;
 
 public static class SeedData
 {
-    public async static Task Initialize(IServiceProvider serviceProvider)
+    public static async Task Initialize(IServiceProvider serviceProvider)
     {
         var settings = serviceProvider.GetRequiredService<IOptions<ApplicationSettings>>();
         var cosmosClient = serviceProvider.GetRequiredService<CosmosClient>();
@@ -32,26 +32,26 @@ public static class SeedData
 
         // Employees
         var tom = new Employee { Id = Guid.NewGuid().ToString(), Name = "Thomas Fringe" };
-        await employeeRepository.AddItemAsync(tom);
+        var tomShifts = new List<Shift>();
         var jane = new Employee { Id = Guid.NewGuid().ToString(), Name = "Jane Haircomb" };
-        await employeeRepository.AddItemAsync(jane);
+        var janeShifts = new List<Shift>();
         var will = new Employee { Id = Guid.NewGuid().ToString(), Name = "William Scissors" };
-        await employeeRepository.AddItemAsync(will);
+        var willShifts = new List<Shift>();
         var jess = new Employee { Id = Guid.NewGuid().ToString(), Name = "Jessica Clipper" };
-        await employeeRepository.AddItemAsync(jess);
+        var jessShifts = new List<Shift>();
         var ed = new Employee { Id = Guid.NewGuid().ToString(), Name = "Edward Sideburn" };
-        await employeeRepository.AddItemAsync(ed);
+        var edShifts = new List<Shift>();
         var oli = new Employee { Id = Guid.NewGuid().ToString(), Name = "Oliver Bold" };
-        await employeeRepository.AddItemAsync(oli);
+        var oliShifts = new List<Shift>();
 
         // Shifts
-        DateTime now = DateTime.Now;
-        for (int i = 0;i < 10;i++)
+        var now = DateTime.Now;
+        for (var i = 0;i < 10;i++)
         {
             DateTime date = now.AddDays(i);
 
             // Sunday the salon is closed
-            if (date.DayOfWeek != DayOfWeek.Sunday)
+            if (date.DayOfWeek == DayOfWeek.Sunday)
             {
                 continue;
             }
@@ -59,48 +59,49 @@ public static class SeedData
             // Thomas works all shifts except Saturdays
             if (date.DayOfWeek != DayOfWeek.Saturday)
             {
-                tom.Shifts = new[]{ 
+                tomShifts.AddRange(new[] { 
                     new Shift { Starting = SetTime(date, "09:00"), Ending = SetTime(date, "12:00") },
                     new Shift { Starting = SetTime(date, "13:00"), Ending = SetTime(date, "18:00") }
-                };
+                });
             }
-            await employeeRepository.UpdateItemAsync(tom.Id, tom);
 
             // Jane works at peak times only
-            jane.Shifts = new[] { 
-                new Shift { Starting = SetTime(date, "11:00"), Ending = SetTime(date, "14:00") } 
-            };
-            await employeeRepository.UpdateItemAsync(jane.Id, jane);
-
+            janeShifts.Add(new Shift { Starting = SetTime(date, "11:00"), Ending = SetTime(date, "14:00") });
+            
             // Will works Friday and Saturday only
             if (date.DayOfWeek == DayOfWeek.Friday || date.DayOfWeek == DayOfWeek.Saturday)
             {
-                will.Shifts = new[]{
+                willShifts.AddRange(new[] {
                     new Shift { Starting = SetTime(date, "09:00"), Ending = SetTime(date, "12:00") },
                     new Shift { Starting = SetTime(date, "13:00"), Ending = SetTime(date, "18:00") }
-                };
-                await employeeRepository.UpdateItemAsync(will.Id, will);
+                });
             }
 
             // Jess works all week but takes a longer lunch break
-            jess.Shifts = new[]{
+            jessShifts.AddRange(new[] {
                     new Shift { Starting = SetTime(date, "09:00"), Ending = SetTime(date, "11:30") },
                     new Shift { Starting = SetTime(date, "14:30"), Ending = SetTime(date, "18:00") }
-                };
-            await employeeRepository.UpdateItemAsync(jess.Id, jess);
+                });
 
             // Ed works morning shifts
-            ed.Shifts = new[] {
-                new Shift { Starting = SetTime(date, "09:00"), Ending = SetTime(date, "12:00") }
-            };
-            await employeeRepository.UpdateItemAsync(ed.Id, ed);
+            edShifts.Add(new Shift { Starting = SetTime(date, "09:00"), Ending = SetTime(date, "12:00") });
 
             // Oli works afternoon shifts
-            oli.Shifts = new[] {
-                new Shift { Starting = SetTime(date, "13:00"), Ending = SetTime(date, "18:00") }
-            };
-            await employeeRepository.UpdateItemAsync(oli.Id, oli);
+            oliShifts.Add(new Shift { Starting = SetTime(date, "13:00"), Ending = SetTime(date, "18:00") });
         }
+
+        tom.Shifts = tomShifts.ToArray();
+        await employeeRepository.AddItemAsync(tom);
+        jane.Shifts = janeShifts.ToArray();
+        await employeeRepository.AddItemAsync(jane);
+        will.Shifts = willShifts.ToArray();
+        await employeeRepository.AddItemAsync(will);
+        jess.Shifts = jessShifts.ToArray();
+        await employeeRepository.AddItemAsync(jess);
+        ed.Shifts = edShifts.ToArray();
+        await employeeRepository.AddItemAsync(ed);
+        oli.Shifts = oliShifts.ToArray();
+        await employeeRepository.AddItemAsync(oli);
 
         // Customers
         var paul = new Customer { Id = Guid.NewGuid().ToString(), FirstName = "Paul", LastName = "Longhair" };
@@ -150,16 +151,16 @@ public static class SeedData
 
     private static DateTime GetFirstMonday()
     {
-        DateTime now = SetTime(DateTime.Now.Date, "9:30");
-        int diff = DayOfWeek.Monday - now.DayOfWeek;
-        DateTime monday = now.AddDays(diff);
+        var now = SetTime(DateTime.Now.Date, "9:30");
+        var diff = DayOfWeek.Monday - now.DayOfWeek;
+        var monday = now.AddDays(diff);
 
         return monday;
     }
 
     private static DateTime SetTime(DateTime date, string time)
     {
-        byte[] hourMin = time.Split(":").Select(x => byte.Parse(x)).ToArray();
+        var hourMin = time.Split(":").Select(byte.Parse).ToArray();
         return new DateTime(date.Year, date.Month, date.Day, hourMin[0], hourMin[1], 0);
     }
 }

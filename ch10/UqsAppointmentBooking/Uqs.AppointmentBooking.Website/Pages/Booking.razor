@@ -38,7 +38,7 @@ else
                         Select start time:
                         <select name="Time" id="_times" class="form-select form-select-lg mb-3">
                             <option selected value="">- Time -</option>
-                            @foreach (var time in _availableSlots.DaysSlots.First().Times)
+                            @foreach (var time in _availableSlots.DaysSlots.FirstOrDefault()?.Times)
                             {
                                 <option value="@time.ToString("yyyy-MM-dd HH:mm")">@time.ToString("HH:mm")</option>
                             }
