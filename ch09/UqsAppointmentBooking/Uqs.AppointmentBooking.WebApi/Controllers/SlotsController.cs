@@ -15,11 +15,13 @@ public class SlotsController : ControllerBase
     }
 
 
-    [HttpGet]
-    public async Task<ActionResult<Contract.AvailableSlots>> GetSlots(int serviceId, int? employeeId)
+    [HttpGet("{serviceId}")]
+    public async Task<ActionResult<Contract.AvailableSlots>> Slots(int serviceId, [FromQuery] int employeeId)
     {
-        var slots = await _slotsService.GetAvailableSlotsForEmployee(serviceId, employeeId!.Value);
-       
-        return null!;
+        var slots = await _slotsService.GetAvailableSlotsForEmployee(serviceId, employeeId);
+
+        var daySlots = slots.DaysSlots.Select(x => new Contract.DaySlots(x.Day, x.Times)).ToArray();
+
+        return new Contract.AvailableSlots(daySlots);
     }
 }

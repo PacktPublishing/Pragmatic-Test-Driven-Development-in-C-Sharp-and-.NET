@@ -6,7 +6,7 @@ namespace Uqs.AppointmentBooking.Domain.Database;
 
 public static class SeedData
 {
-    public async static Task Initialize(IServiceProvider serviceProvider)
+    public static async Task Initialize(IServiceProvider serviceProvider)
     {
         using var context = new ApplicationContext(serviceProvider.GetRequiredService<DbContextOptions<ApplicationContext>>());
         await context.Database.EnsureCreatedAsync();
@@ -31,7 +31,7 @@ public static class SeedData
             DateTime date = now.AddDays(i);
 
             // Sunday the salon is closed
-            if (date.DayOfWeek != DayOfWeek.Sunday)
+            if (date.DayOfWeek == DayOfWeek.Sunday)
             {
                 continue;
             }
