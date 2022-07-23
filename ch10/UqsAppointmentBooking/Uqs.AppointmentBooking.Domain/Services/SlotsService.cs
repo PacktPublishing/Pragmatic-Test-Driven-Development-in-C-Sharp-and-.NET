@@ -48,7 +48,7 @@ public class SlotsService : ISlotsService
         var appointmentsMaxDay = GetEndOfOpenAppointments();
 
         List<(DateTime From, DateTime To)> timeIntervals = new();
-
+   
         var shifts = employee.Shifts!.Where(x => 
             x.Ending < appointmentsMaxDay &&
             ((x.Starting <= _now && x.Ending > _now) || x.Starting > _now));
@@ -69,7 +69,7 @@ public class SlotsService : ISlotsService
                 }
             }
         }
-        var employeeAppointments = await _appointmentRepository.GetAppoitmentsByEmployeeId(employeeId);
+        var employeeAppointments = await _appointmentRepository.GetAppoitmentsByEmployeeIdAsync(employeeId);
         var appointments = employeeAppointments.Where(x =>
             x.Ending < appointmentsMaxDay &&
             ((x.Starting <= _now && x.Ending > _now) || x.Starting > _now)).ToArray();

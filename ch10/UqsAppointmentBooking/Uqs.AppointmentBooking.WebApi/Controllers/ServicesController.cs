@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using Uqs.AppointmentBooking.Domain.Services;
 
 namespace Uqs.AppointmentBooking.WebApi.Controllers;
