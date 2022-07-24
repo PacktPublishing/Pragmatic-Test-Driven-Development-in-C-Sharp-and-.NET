@@ -1,7 +1,4 @@
-﻿using System.Linq.Expressions;
-using System.Linq;
-
-using Uqs.AppointmentBooking.Domain.DomainObjects;
+﻿using Uqs.AppointmentBooking.Domain.DomainObjects;
 using Uqs.AppointmentBooking.Domain.Repository;
 
 namespace Uqs.AppointmentBooking.Domain.Services;

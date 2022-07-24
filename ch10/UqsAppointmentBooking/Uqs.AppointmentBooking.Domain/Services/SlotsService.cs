@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.Options;
-using Uqs.AppointmentBooking.Domain.Database;
-using Uqs.AppointmentBooking.Domain.DomainObjects;
 using Uqs.AppointmentBooking.Domain.Report;
 using Uqs.AppointmentBooking.Domain.Repository;
 

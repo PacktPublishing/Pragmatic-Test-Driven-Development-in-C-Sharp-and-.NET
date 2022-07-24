@@ -27,7 +27,7 @@ public class ServicesServiceTests
     }
 
     [Fact]
-    public async Task GetActiveServices_TwoActiveOneInactiveService_TwoServices()
+    public async Task GetActiveServices_TwoActiveServices_TwoServices()
     {
         // Arrange
         _serviceRepository.GetActiveServices()

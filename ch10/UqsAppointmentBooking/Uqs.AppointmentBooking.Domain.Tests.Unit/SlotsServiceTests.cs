@@ -67,7 +67,7 @@ public class SlotsServiceTests
     public async Task GetAvailableSlotsForEmployee_NoShiftsForTomAndNoAppointmentsInSystem_NoSlots()
     {
         // Arrange
-        DateTime appointmentFrom = new DateTime(2022, 10, 3, 7, 0, 0);
+        var appointmentFrom = new DateTime(2022, 10, 3, 7, 0, 0);
         _nowService.Now.Returns(appointmentFrom);
         var tom = new Employee { Id = "Tom", Name = "Thomas Fringe", Shifts = Array.Empty<Shift>() };
         var mensCut30Min = new Service { Id = "MensCut30Min", AppointmentTimeSpanInMin = 30 };
