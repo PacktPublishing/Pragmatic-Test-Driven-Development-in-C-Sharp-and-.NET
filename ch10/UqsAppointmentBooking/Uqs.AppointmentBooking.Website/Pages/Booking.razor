@@ -30,7 +30,7 @@ else
                 <div class="row">
                     <label>
                         Select day for your appointment:
-                        <input type="Date" class="form-select form-select-lg mb-3" value="@DateTime.Today.ToString("yyyy-MM-dd")" min="@_availableSlots.DaysSlots.Min(x => x.Day).ToString("yyyy-MM-dd")" max="@_availableSlots.DaysSlots.Max(x => x.Day).ToString("yyyy-MM-dd")" />
+                        <input type="Date" class="form-select form-select-lg mb-3" value="@DateTime.Today.ToString("yyyy-MM-dd")" min="@_availableSlots?.DaysSlots.Min(x => x.Day).ToString("yyyy-MM-dd")" max="@_availableSlots?.DaysSlots.Max(x => x.Day).ToString("yyyy-MM-dd")" />
                     </label>
                 </div>
                 <div class="row">
@@ -38,7 +38,7 @@ else
                         Select start time:
                         <select name="Time" id="_times" class="form-select form-select-lg mb-3">
                             <option selected value="">- Time -</option>
-                            @foreach (var time in _availableSlots.DaysSlots.FirstOrDefault()?.Times)
+                            @foreach (var time in _availableSlots?.DaysSlots.FirstOrDefault()?.Times!)
                             {
                                 <option value="@time.ToString("yyyy-MM-dd HH:mm")">@time.ToString("HH:mm")</option>
                             }
@@ -85,12 +85,11 @@ else
 
 @code {
     [Parameter]
-    public string ServiceId { get; set; }
+    public string? ServiceId { get; set; }
 
     private Service? _service;
     private AvailableEmployees? _availableEmployees;
     private AvailableSlots? _availableSlots;
-    private InputSelect<string>? _times;
     private string? _baseAddress;
 
     protected override async Task OnInitializedAsync()
@@ -99,7 +98,7 @@ else
         _service = await Http.GetFromJsonAsync<Service>($"{_baseAddress}/services/{ServiceId}");
         _availableEmployees = await Http.GetFromJsonAsync<AvailableEmployees>($"{_baseAddress}/employees");
         _availableSlots = await Http.GetFromJsonAsync<AvailableSlots>($"{_baseAddress}/slots/{ServiceId}?employeeId=" + 
-            $"{_availableEmployees.Employees.First().EmployeeId}");
+            $"{_availableEmployees?.Employees.First().EmployeeId}");
     }
 
     private async Task SelectedEmployeesChanged(ChangeEventArgs e)

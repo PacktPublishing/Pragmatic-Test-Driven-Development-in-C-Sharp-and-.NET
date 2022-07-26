@@ -1,3 +1,3 @@
 ﻿namespace Uqs.AppointmentBooking.Contract;
 
-public record Employee(string EmployeeId, string Name);
+public record Employee(string? EmployeeId, string Name);
