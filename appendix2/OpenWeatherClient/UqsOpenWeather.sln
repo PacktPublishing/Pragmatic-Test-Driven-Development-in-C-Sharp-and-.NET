@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uqs.OpenWeather", "Uqs.OpenWeather\Uqs.OpenWeather.csproj", "{8C380464-2CA8-48D8-8218-4F3E59A3E251}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Uqs.OpenWeather.Test.Unit", "Uqs.OpenWeather.Test.Unit\Uqs.OpenWeather.Test.Unit.csproj", "{3063C91B-C274-4275-A9EA-2F37CBC8B9BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8C380464-2CA8-48D8-8218-4F3E59A3E251}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C380464-2CA8-48D8-8218-4F3E59A3E251}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C380464-2CA8-48D8-8218-4F3E59A3E251}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C380464-2CA8-48D8-8218-4F3E59A3E251}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3063C91B-C274-4275-A9EA-2F37CBC8B9BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3063C91B-C274-4275-A9EA-2F37CBC8B9BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3063C91B-C274-4275-A9EA-2F37CBC8B9BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3063C91B-C274-4275-A9EA-2F37CBC8B9BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F43026FD-D411-4757-BCF7-E32670007A94}
+	EndGlobalSection
+EndGlobal
